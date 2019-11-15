@@ -1,0 +1,43 @@
+{
+  // Use IntelliSense para saber los atributos posibles.
+  // Mantenga el puntero para ver las descripciones de los existentes atributos
+  // Para más información, visite: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch all test",
+      "type": "node",
+      "request": "launch",
+      "envFile": "${workspaceFolder}/.env",
+      "program": "${workspaceRoot}/node_modules/.bin/react-scripts",
+      "args": ["test", "--runInBand", "--no-cache", "--env=jsdom"]
+    },
+    {
+      "name": "Launch current test",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/node_modules/.bin/react-scripts",
+      "args": ["test", "--no-cache", "--env=jsdom", "${relativeFile}"],
+      "console": "internalConsole",
+      "internalConsoleOptions": "openOnSessionStart",
+      "disableOptimisticBPs": true
+    },
+    {
+      "name": "Launch Chrome",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceRoot}/src",
+      "sourceMapPathOverrides": {
+        "webpack:///src/*": "${webRoot}/*"
+      }
+    },
+    {
+      "name": "Launch Firefox",
+      "type": "firefox",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceRoot}/src"
+    }
+  ]
+}
