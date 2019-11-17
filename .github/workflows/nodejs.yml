@@ -10,10 +10,10 @@ jobs:
     # Install Node.js
     # https://github.com/actions/setup-node
     - uses: actions/checkout@v1
-    - name: Use Node.js latest
+    - name: Use Node.js 12.x
       uses: actions/setup-node@v1
       with:
-        node-version: latest
+        node-version: 12.x
     # Restore the previous yarn cache directory
     # See https://github.com/actions/cache
     - uses: actions/cache@v1
@@ -52,10 +52,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Use Node.js latest
+      - name: Use Node.js 12.x
         uses: actions/setup-node@v1
         with:
-          node-version: latest
+          node-version: 12.x
       - uses: actions/cache@v1
         name: Cache dependencies
         with:
@@ -97,10 +97,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Use Node.js latest
+      - name: Use Node.js 12.x
         uses: actions/setup-node@v1
         with:
-          node-version: latest
+          node-version: 12.x
       - uses: actions/cache@v1
         name: Cache dependencies
         with:
