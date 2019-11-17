@@ -44,8 +44,8 @@ jobs:
       env:
         CI: true
       run: |
-        npm ci
-        npx cypress verify
+        yarn install
+        yarn cypress verify
   test-unit:
     name: Run unit, smoke and integration tests
     needs: [install]
