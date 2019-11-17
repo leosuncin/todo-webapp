@@ -1,10 +1,6 @@
-# Custom CRA template with Typescript and SASS
+# TODO app
 
-> This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-- Ready to use [@testing-libray/react](https://npm.im/@testing-library/react) in test files.
-- Run end to end test with [Cypress](https://cypress.io) and [@testing-libray/cypress](https://npm.im/@testing-libray/cypress).
-- Lint files before commit and run tests before push, thanks to [husky](https://npm.im/husky) and [lint-staged](https://npm.im/lint-staged).
+> Follow Component Development Driven
 
 ## Available Scripts
 
@@ -33,18 +29,10 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+### `npm run test:e2e`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Launches end to end tests with [cypress](https://cypress.io).
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### `npm run storybook`
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Launches [storybook](https://storybook.js.org) to see the components.
