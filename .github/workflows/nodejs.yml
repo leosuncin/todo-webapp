@@ -82,6 +82,7 @@ jobs:
       - name: Run tests
         env:
           CI: true
+          SKIP_PREFLIGHT_CHECK: true
         run: |
           yarn test --coverage
           yarn storybook --smoke-test
@@ -127,6 +128,7 @@ jobs:
       - name: Run tests
         env:
           CI: true
+          SKIP_PREFLIGHT_CHECK: true
           TERM: xterm
         run: yarn test:e2e
       # Save screenshots if fail
