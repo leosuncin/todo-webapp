@@ -37,7 +37,6 @@ it('toggle todo', () => {
 
   userEvent.type(getByRole('textbox'), 'Make a sandwich');
   userEvent.click(getByRole('button'));
-
   userEvent.click(getByRole('checkbox'));
 
   expect(getByRole('list').childNodes).toHaveLength(1);
