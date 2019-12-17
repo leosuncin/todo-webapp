@@ -1,5 +1,7 @@
 # TODO app
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/leosuncin/todo-webapp.svg)](https://greenkeeper.io/)
+
 > Follow Component Development Driven
 
 ## Available Scripts
