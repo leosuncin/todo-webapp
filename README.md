@@ -1,6 +1,7 @@
 # TODO app
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/leosuncin/todo-webapp.svg)](https://greenkeeper.io/)
+[![Dependency Status](https://img.shields.io/david/leosuncin/todo-webapp)](https://david-dm.org/leosuncin/todo-webapp)
+[![DevDependency Status](https://img.shields.io/david/dev/leosuncin/todo-webapp)](https://david-dm.org/leosuncin/todo-webapp?type=dev)
 
 > Follow Component Development Driven
 
