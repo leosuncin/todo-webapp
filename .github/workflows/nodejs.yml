@@ -39,9 +39,13 @@ jobs:
     runs-on: ubuntu-16.04
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     steps:
+      - uses: bahmutov/npm-install@v1
+        with:
+          useLockFile: false
       - uses: cypress-io/github-action@v1
         timeout-minutes: 10
         with:
+          install: false
           build: yarn build
           start: npx superstatic build -p 3000
           wait-on: 'http://localhost:3000'
