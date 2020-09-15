@@ -1,17 +1,12 @@
-import { action } from '@storybook/addon-actions';
+// also exported from '@storybook/react' if you can deal with breaking changes in 6.1
+import { Story, Meta } from '@storybook/react/types-6-0';
 import React from 'react';
 
-import AddTodo from './AddTodo';
+import AddTodo, { AddTodoProps } from './AddTodo';
 
 export default {
-  title: 'Todo|Add Todo',
+  title: 'Todo/Add Todo',
   component: AddTodo,
-};
+} as Meta;
 
-export const Default = () => (
-  <AddTodo
-    onChangeText={action('change-text')}
-    onInputKeyPress={action('input-key-press')}
-    onButtonClick={action('button-click')}
-  />
-);
+export const Default: Story<AddTodoProps> = (args) => <AddTodo {...args} />;

@@ -1,15 +1,14 @@
 import { Paper, Grid, TextField, Button } from '@material-ui/core';
 import React from 'react';
-import PropTypes from 'prop-types';
 
-const propTypes = {
-  text: PropTypes.string,
-  onChangeText: PropTypes.func.isRequired,
-  onInputKeyPress: PropTypes.func.isRequired,
-  onButtonClick: PropTypes.func.isRequired,
+export type AddTodoProps = {
+  text?: string;
+  onChangeText: React.ChangeEventHandler<HTMLInputElement>;
+  onInputKeyPress: React.KeyboardEventHandler<HTMLInputElement>;
+  onButtonClick: React.MouseEventHandler<HTMLButtonElement>;
 };
 
-const AddTodo: React.FC<PropTypes.InferProps<typeof propTypes>> = ({
+const AddTodo: React.FC<AddTodoProps> = ({
   text,
   onChangeText,
   onInputKeyPress,

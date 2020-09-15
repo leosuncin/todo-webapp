@@ -5,25 +5,20 @@ import {
   ListItemSecondaryAction,
   IconButton,
 } from '@material-ui/core';
-import DeletedOutlined from '@material-ui/icons/DeleteOutlined';
-import PropTypes from 'prop-types';
+import { DeleteOutlined as DeleteOutlinedIcon } from '@material-ui/icons';
 import React from 'react';
 
-const propTypes = {
-  divider: PropTypes.bool,
-  checked: PropTypes.bool,
-  text: PropTypes.string.isRequired,
-  onToggleDone: PropTypes.func.isRequired,
-  onDeleteTodo: PropTypes.func.isRequired,
-};
-const defaultProps = {
-  divider: false,
-  checked: false,
+export type TodoItemProps = {
+  divider?: boolean;
+  checked?: boolean;
+  text: string;
+  onToggleDone: React.MouseEventHandler<HTMLButtonElement>;
+  onDeleteTodo: React.MouseEventHandler<HTMLButtonElement>;
 };
 
-const TodoItem: React.FC<PropTypes.InferProps<typeof propTypes>> = ({
-  divider,
-  checked,
+const TodoItem: React.FC<TodoItemProps> = ({
+  divider = false,
+  checked = false,
   text,
   onToggleDone,
   onDeleteTodo,
@@ -37,12 +32,10 @@ const TodoItem: React.FC<PropTypes.InferProps<typeof propTypes>> = ({
     <ListItemText primary={text} />
     <ListItemSecondaryAction>
       <IconButton aria-label="Delete todo" onClick={onDeleteTodo}>
-        <DeletedOutlined />
+        <DeleteOutlinedIcon />
       </IconButton>
     </ListItemSecondaryAction>
   </ListItem>
 );
-TodoItem.propTypes = propTypes;
-TodoItem.defaultProps = defaultProps;
 
 export default TodoItem;

@@ -1,39 +1,18 @@
-import { action } from '@storybook/addon-actions';
-import { withKnobs, boolean, text } from '@storybook/addon-knobs';
+// also exported from '@storybook/react' if you can deal with breaking changes in 6.1
+import { Story, Meta } from '@storybook/react/types-6-0';
 import React from 'react';
 
-import TodoItem from './TodoItem';
+import TodoItem, { TodoItemProps } from './TodoItem';
 
 export default {
-  title: 'Todo|Todo Item',
+  title: 'Todo/Todo Item',
   component: TodoItem,
-  decorators: [withKnobs],
-};
+} as Meta;
 
-export const Default = (
-  <TodoItem
-    divider={boolean('Divider', false)}
-    checked={boolean('Checked', false)}
-    text={text('Text', 'Make me a sandwich')}
-    onToggleDone={action('toggle-done')}
-    onDeleteTodo={action('delete-todo')}
-  />
-);
+export const Default: Story<TodoItemProps> = (args) => <TodoItem {...args} />;
 
-export const showSeparator = (
-  <TodoItem
-    divider
-    text="Make me a sandwich"
-    onToggleDone={action('toggle-done')}
-    onDeleteTodo={action('delete-todo')}
-  />
-);
+export const ShowSeparator = Default.bind({});
+ShowSeparator.args = { divider: true, text: 'Make me a sandwich' };
 
-export const doneTodo = (
-  <TodoItem
-    checked
-    text="Make me a sandwich"
-    onToggleDone={action('toggle-done')}
-    onDeleteTodo={action('delete-todo')}
-  />
-);
+export const DoneTodo = Default.bind({});
+DoneTodo.args = { checked: true, text: 'Make me a sandwich' };
