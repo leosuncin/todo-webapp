@@ -1,9 +1,12 @@
 {
   "extends": "../tsconfig.json",
-  "include": ["*/*.ts"],
+  "include": ["**/*.ts"],
+  "exclude": ["../node_modules"],
   "compilerOptions": {
     "isolatedModules": false,
+    "target": "es6",
+    "module": "es6",
     "noEmit": false,
-    "types": ["cypress", "@types/testing-library__cypress"]
+    "types": ["cypress", "@testing-library/cypress"]
   }
 }

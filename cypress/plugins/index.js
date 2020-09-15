@@ -1,5 +1,7 @@
 const cypressTypeScriptPreprocessor = require('./cy-ts-preprocessor');
 
-module.exports = on => {
+module.exports = (on, config) => {
   on('file:preprocessor', cypressTypeScriptPreprocessor);
+
+  return config;
 };
