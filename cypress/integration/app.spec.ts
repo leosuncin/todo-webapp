@@ -1,4 +1,4 @@
-context('TODO test', () => {
+describe('TODO test', () => {
   beforeEach(() => {
     cy.visit('/');
   });
@@ -8,38 +8,26 @@ context('TODO test', () => {
   });
 
   it('should create a todo', () => {
-    cy.findByRole('textbox')
-      .type('Make a sandwich')
-      .findByRole('button')
-      .click();
+    cy.findByRole('textbox').type('Make a sandwich');
+    cy.findByRole('button', { name: /Add/i }).click();
 
     cy.findByRole('list').should('have.length', 1);
   });
 
   it('should remove a todo', () => {
-    cy.findByRole('textbox')
-      .type('Make a sandwich{enter}')
-      .findByRole('list')
-      .should('have.length', 1)
-      .findByLabelText(/Delete todo/)
-      .click();
+    cy.findByRole('textbox').type('Make a sandwich{enter}');
+    cy.findByRole('list').should('have.length', 1);
+    cy.findByLabelText(/Delete todo/).click();
 
-    cy.findByRole('list')
-      .its('length')
-      .should('be', 0);
+    cy.findAllByRole('listitem').should('have.length', 0);
   });
 
   it('should toggle a todo', () => {
-    cy.findByRole('textbox')
-      .type('Make a sandwich')
-      .findByRole('button')
-      .click()
-      .findByRole('checkbox')
-      .click();
+    cy.findByRole('textbox').type('Make a sandwich');
+    cy.findByRole('button').click();
+    cy.findByRole('checkbox').click();
 
-    cy.findByRole('list')
-      .should('have.length', 1)
-      .findByRole('checkbox')
-      .should('be.checked');
+    cy.findByRole('list').should('have.length', 1);
+    cy.findByRole('checkbox').should('be.checked');
   });
 });
