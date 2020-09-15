@@ -7,18 +7,18 @@ jobs:
     name: Lint source code
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - uses: reviewdog/action-eslint@v1
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        eslint_flags: --ext '.js' --ext '.ts' --ext '.tsx' .
+        eslint_flags: --ext '.js,.ts,.tsx' .
 
   test-unit:
     name: Run unit, smoke and integration tests
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - uses: bahmutov/npm-install@v1
       - name: Run tests
         env:
@@ -29,7 +29,7 @@ jobs:
           yarn storybook --smoke-test
       # Save code coverage report
       # See https://github.com/actions/upload-artifact
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v2
         with:
           name: Code coverage
           path: coverage
@@ -39,19 +39,17 @@ jobs:
     runs-on: ubuntu-16.04
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     steps:
-      - uses: actions/checkout@v1
-      - uses: cypress-io/github-action@v1
+      - uses: actions/checkout@v2
+      - uses: cypress-io/github-action@v2
         timeout-minutes: 10
         with:
           build: yarn build
           start: npx superstatic build -p 3000
           wait-on: 'http://localhost:3000'
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v2
         if: failure()
         with:
-          name: screenshots
-          path: cypress/screenshots
-      - uses: actions/upload-artifact@v1
-        with:
-          name: videos
-          path: cypress/videos
+          name: screenshots & videos
+          path: |
+            cypress/screenshots
+            cypress/videos
