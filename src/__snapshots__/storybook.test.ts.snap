@@ -441,7 +441,7 @@ exports[`Storyshots Todo/List Todo With Items 1`] = `
       >
         <span
           aria-disabled={false}
-          className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-17 MuiCheckbox-root MuiCheckbox-colorSecondary MuiIconButton-colorSecondary"
+          className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-1 MuiCheckbox-root MuiCheckbox-colorSecondary MuiIconButton-colorSecondary"
           onBlur={[Function]}
           onClick={[Function]}
           onDragLeave={[Function]}
@@ -461,7 +461,7 @@ exports[`Storyshots Todo/List Todo With Items 1`] = `
           >
             <input
               checked={false}
-              className="PrivateSwitchBase-input-20"
+              className="PrivateSwitchBase-input-4"
               data-indeterminate={false}
               onChange={[Function]}
               type="checkbox"
@@ -536,7 +536,7 @@ exports[`Storyshots Todo/List Todo With Items 1`] = `
       >
         <span
           aria-disabled={false}
-          className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-17 MuiCheckbox-root MuiCheckbox-colorSecondary PrivateSwitchBase-checked-18 Mui-checked MuiIconButton-colorSecondary"
+          className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-1 MuiCheckbox-root MuiCheckbox-colorSecondary PrivateSwitchBase-checked-2 Mui-checked MuiIconButton-colorSecondary"
           onBlur={[Function]}
           onClick={[Function]}
           onDragLeave={[Function]}
@@ -556,7 +556,7 @@ exports[`Storyshots Todo/List Todo With Items 1`] = `
           >
             <input
               checked={true}
-              className="PrivateSwitchBase-input-20"
+              className="PrivateSwitchBase-input-4"
               data-indeterminate={false}
               onChange={[Function]}
               type="checkbox"
@@ -636,7 +636,7 @@ exports[`Storyshots Todo/Todo Item Default 1`] = `
   >
     <span
       aria-disabled={false}
-      className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-5 MuiCheckbox-root MuiCheckbox-colorSecondary MuiIconButton-colorSecondary"
+      className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-1 MuiCheckbox-root MuiCheckbox-colorSecondary MuiIconButton-colorSecondary"
       onBlur={[Function]}
       onDragLeave={[Function]}
       onFocus={[Function]}
@@ -655,7 +655,7 @@ exports[`Storyshots Todo/Todo Item Default 1`] = `
       >
         <input
           checked={false}
-          className="PrivateSwitchBase-input-8"
+          className="PrivateSwitchBase-input-4"
           data-indeterminate={false}
           onChange={[Function]}
           type="checkbox"
@@ -726,7 +726,7 @@ exports[`Storyshots Todo/Todo Item Done Todo 1`] = `
   >
     <span
       aria-disabled={false}
-      className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-13 MuiCheckbox-root MuiCheckbox-colorSecondary PrivateSwitchBase-checked-14 Mui-checked MuiIconButton-colorSecondary"
+      className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-1 MuiCheckbox-root MuiCheckbox-colorSecondary PrivateSwitchBase-checked-2 Mui-checked MuiIconButton-colorSecondary"
       onBlur={[Function]}
       onDragLeave={[Function]}
       onFocus={[Function]}
@@ -745,7 +745,7 @@ exports[`Storyshots Todo/Todo Item Done Todo 1`] = `
       >
         <input
           checked={true}
-          className="PrivateSwitchBase-input-16"
+          className="PrivateSwitchBase-input-4"
           data-indeterminate={false}
           onChange={[Function]}
           type="checkbox"
@@ -822,7 +822,7 @@ exports[`Storyshots Todo/Todo Item Show Separator 1`] = `
   >
     <span
       aria-disabled={false}
-      className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-9 MuiCheckbox-root MuiCheckbox-colorSecondary MuiIconButton-colorSecondary"
+      className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-1 MuiCheckbox-root MuiCheckbox-colorSecondary MuiIconButton-colorSecondary"
       onBlur={[Function]}
       onDragLeave={[Function]}
       onFocus={[Function]}
@@ -841,7 +841,7 @@ exports[`Storyshots Todo/Todo Item Show Separator 1`] = `
       >
         <input
           checked={false}
-          className="PrivateSwitchBase-input-12"
+          className="PrivateSwitchBase-input-4"
           data-indeterminate={false}
           onChange={[Function]}
           type="checkbox"

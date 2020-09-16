@@ -1,42 +1,81 @@
-import { Paper, Grid, TextField, Button } from '@material-ui/core';
+import { Button, Grid, TextField } from '@material-ui/core';
 import React from 'react';
+import { useForm, ValidationRules } from 'react-hook-form';
 
-export type AddTodoProps = {
-  text?: string;
-  onChangeText: React.ChangeEventHandler<HTMLInputElement>;
-  onInputKeyPress: React.KeyboardEventHandler<HTMLInputElement>;
-  onButtonClick: React.MouseEventHandler<HTMLButtonElement>;
+type NewTodoFields = {
+  /**
+   * The new task description
+   *
+   * @type {string}
+   */
+  text: string;
 };
 
-const AddTodo: React.FC<AddTodoProps> = ({
-  text,
-  onChangeText,
-  onInputKeyPress,
-  onButtonClick,
-}) => (
-  <Paper style={{ margin: 16, padding: 16 }}>
-    <Grid container>
-      <Grid xs={10} md={11} item style={{ paddingRight: 16 }}>
-        <TextField
-          fullWidth
-          placeholder="Add todo here"
-          value={text}
-          onChange={onChangeText}
-          onKeyPress={onInputKeyPress}
-        />
-      </Grid>
-      <Grid xs={2} md={1} item>
-        <Button
-          fullWidth
-          color="secondary"
-          variant="outlined"
-          onClick={onButtonClick}
-        >
-          Add
-        </Button>
-      </Grid>
+export type AddTodoProps = {
+  /**
+   * Handle add a new todo
+   *
+   */
+  onSubmit: (newTodo: NewTodoFields) => void;
+  /**
+   * Default text of the new todo
+   *
+   * @type {string}
+   */
+  defaultText?: string;
+};
+
+export const validations: { [name in keyof NewTodoFields]: ValidationRules } = {
+  text: {
+    required: 'Text is required',
+    maxLength: {
+      value: 140,
+      message: 'Text must be at most 140 characters',
+    },
+  },
+};
+
+const AddTodo: React.FC<AddTodoProps> = ({ onSubmit, defaultText = '' }) => {
+  const { handleSubmit, register, errors, formState, reset } = useForm<
+    NewTodoFields
+  >({
+    defaultValues: {
+      text: defaultText,
+    },
+  });
+
+  return (
+    <Grid
+      component="form"
+      onSubmit={handleSubmit((body) => {
+        onSubmit(body);
+        reset();
+      })}
+    >
+      <TextField
+        label="Task"
+        margin="normal"
+        name="text"
+        id="text-input"
+        variant="outlined"
+        placeholder="What needs to be done? "
+        fullWidth
+        error={!!errors.text}
+        helperText={errors.text?.message}
+        inputRef={register(validations.text)}
+      />
+      <Button
+        color="primary"
+        size="large"
+        type="submit"
+        variant="contained"
+        fullWidth
+        disabled={formState.isSubmitting}
+      >
+        Add
+      </Button>
     </Grid>
-  </Paper>
-);
+  );
+};
 
 export default AddTodo;

@@ -9,4 +9,11 @@ export default {
   component: AddTodo,
 } as Meta;
 
-export const Default: Story<AddTodoProps> = (args) => <AddTodo {...args} />;
+const Template: Story<AddTodoProps> = (args) => <AddTodo {...args} />;
+
+export const Default = Template.bind({});
+
+export const WithDefaultText = Template.bind({});
+WithDefaultText.args = {
+  defaultText: 'Make a sandwich',
+};
