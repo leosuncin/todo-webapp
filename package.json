@@ -36,6 +36,7 @@
     "eslint-plugin-cypress": "^2.11.1",
     "husky": "^4.3.0",
     "lint-staged": "^10.3.0",
+    "mutationobserver-shim": "^0.3.7",
     "prettier": "^2.1.1",
     "react-is": "^16.13.1",
     "react-test-renderer": "^16.13.1",
