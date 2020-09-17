@@ -8,26 +8,43 @@ describe('TODO test', () => {
   });
 
   it('should create a todo', () => {
-    cy.findByRole('textbox').type('Make a sandwich');
+    cy.findByRole('textbox', {name: /Task/i}).type('Make a sandwich');
     cy.findByRole('button', { name: /Add/i }).click();
 
     cy.findByRole('list').should('have.length', 1);
+    cy.findByText('Make a sandwich').should('exist');
+  });
+
+  it('should mark one todo as completed', () => {
+    cy.findByRole('textbox', {name: /Task/i}).type('Make a sandwich{enter}');
+    cy.findAllByRole('listitem')
+      .first()
+      .within(() => {
+        cy.findByRole('checkbox', { name: /^Mark .* as done$/i }).click();
+        cy.findByRole('checkbox', { name: /^Mark .* as undone$/i }).should('be.checked');
+      });
   });
 
   it('should remove a todo', () => {
-    cy.findByRole('textbox').type('Make a sandwich{enter}');
-    cy.findByRole('list').should('have.length', 1);
-    cy.findByLabelText(/Delete todo/).click();
+    cy.findByRole('textbox', {name: /Task/i}).type('Make a sandwich{enter}');
+    cy.findAllByRole('listitem')
+      .first()
+      .within(() => {
+        cy.findByRole('button', {name: /^Delete todo/i}).click();
+      });
 
-    cy.findAllByRole('listitem').should('have.length', 0);
+    cy.findByRole('listitem').should('have.text', 'The list of todo will appear here.');
   });
 
-  it('should toggle a todo', () => {
-    cy.findByRole('textbox').type('Make a sandwich');
-    cy.findByRole('button').click();
-    cy.findByRole('checkbox').click();
+  it('should edit a todo', () => {
+    cy.findByRole('textbox', {name: /Task/i}).type('Make a sandwich{enter}');
+    cy.findAllByRole('listitem')
+      .first()
+      .within(() => {
+        cy.findAllByRole('button').first().dblclick();
+        cy.findByRole('textbox').clear().type('Make a salad').type('{enter}');
+      });
 
-    cy.findByRole('list').should('have.length', 1);
-    cy.findByRole('checkbox').should('be.checked');
+    cy.findByText('Make a salad').should('exist')
   });
 });
