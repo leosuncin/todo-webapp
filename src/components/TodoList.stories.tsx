@@ -1,41 +1,26 @@
 // also exported from '@storybook/react' if you can deal with breaking changes in 6.1
-import { Story, Meta } from '@storybook/react/types-6-0';
-import { action } from '@storybook/addon-actions';
+import { Meta, Story } from '@storybook/react/types-6-0';
 import React from 'react';
 
-import TodoList from './TodoList';
 import TodoItem from './TodoItem';
+import * as TodoItemStories from './TodoItem.stories';
+import TodoList, { TodoListProps } from './TodoList';
 
 export default {
   title: 'Todo/List Todo',
   component: TodoList,
-  excludeStories: ['todos'],
+  subcomponents: { TodoItem },
 } as Meta;
 
-export const todos = [
-  {
-    divider: true,
-    checked: false,
-    text: 'Make a sandwich',
-  },
-  {
-    divider: false,
-    checked: true,
-    text: 'Make a salad',
-  },
-];
+const Template: Story<TodoListProps> = (args) => <TodoList {...args} />;
 
-export const Empty: Story = () => <TodoList />;
+export const Empty = Template.bind({});
+Empty.args = { todos: [] };
 
-export const WithItems: Story = () => (
-  <TodoList>
-    {todos.map((todo, idx) => (
-      <TodoItem
-        key={idx}
-        {...todo}
-        onToggleDone={action('toggle-done')}
-        onDeleteTodo={action('delete-todo')}
-      />
-    ))}
-  </TodoList>
-);
+export const WithItems = Template.bind({});
+WithItems.args = {
+  todos: [
+    TodoItemStories.TodoPending.args!.todo!,
+    TodoItemStories.TodoDone.args!.todo!,
+  ],
+};
