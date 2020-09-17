@@ -1,7 +1,8 @@
 import { Grid, List, Typography } from '@material-ui/core';
 import React from 'react';
 
-import TodoItem, { Todo } from './TodoItem';
+import TodoItem from './TodoItem';
+import { Todo } from '../hooks/todoReducer';
 
 export type TodoListProps = {
   todos: Todo[];

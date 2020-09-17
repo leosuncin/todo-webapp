@@ -12,21 +12,7 @@ import React, { useEffect, useState } from 'react';
 
 import { formatRelativeTime } from '../formatRelativeTime';
 import { validations } from './AddTodo';
-
-export type Todo =
-  | {
-      id: string;
-      text: string;
-      done: false;
-      createdAt: string;
-    }
-  | {
-      id: string;
-      text: string;
-      done: true;
-      createdAt: string;
-      doneAt: string;
-    };
+import { Todo } from '../hooks/todoReducer';
 
 export type TodoItemProps = {
   todo: Todo;

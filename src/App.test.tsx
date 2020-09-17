@@ -1,44 +1,53 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import App from './App';
 
 it('renders without crashing', () => {
-  const container = document.createElement('div');
-  const { getByText } = render(<App />, { container });
-  expect(getByText(/TODO APP/i)).toBeTruthy();
+  render(<App />);
+  expect(screen.getByRole('banner')).toBeInTheDocument();
 });
 
-it('create a todo', () => {
-  const { getByRole } = render(<App />);
+it('create a todo', async () => {
+  render(<App />);
 
-  userEvent.type(getByRole('textbox'), 'Make a sandwich');
-  userEvent.click(getByRole('button'));
+  await userEvent.type(screen.getByLabelText(/Task/i), 'Make a sandwich');
+  act(()=> {
+    userEvent.click(screen.getByRole('button', { name: /Add/i }));
+  })
 
-  expect(getByRole('list').childNodes).toHaveLength(1);
+  await expect(screen.findByText('Make a sandwich')).resolves.toBeInTheDocument();
 });
 
-it('remove todo', () => {
-  const { getByRole, getByLabelText } = render(<App />);
+it('remove todo', async () => {
+  render(<App />);
 
-  userEvent.type(getByRole('textbox'), 'Make a sandwich');
-  fireEvent.keyPress(getByRole('textbox'), { key: 'Enter', keyCode: 13 });
+  await act(async () => {
+    await userEvent.type(
+      screen.getByLabelText(/Task/i),
+      'Make a sandwich{enter}',
+    );
+  })
 
-  expect(getByRole('list').childNodes).toHaveLength(1);
+  userEvent.click(screen.getByRole('button', { name: /^Delete todo/ }));
 
-  userEvent.click(getByLabelText(/Delete todo/));
-
-  expect(getByRole('list').childNodes).toHaveLength(0);
+  expect(screen.queryByText('Make a sandwich')).not.toBeInTheDocument();
 });
 
-it('toggle todo', () => {
-  const { getByRole } = render(<App />);
+it('toggle todo', async () => {
+  render(<App />);
 
-  userEvent.type(getByRole('textbox'), 'Make a sandwich');
-  userEvent.click(getByRole('button'));
-  userEvent.click(getByRole('checkbox'));
+  await act(async () => {
+    await userEvent.type(
+      screen.getByLabelText(/Task/i),
+      'Make a sandwich{enter}',
+    );
+  })
+  userEvent.click(screen.getByRole('checkbox', { name: /Mark .* as done/ }));
 
-  expect(getByRole('list').childNodes).toHaveLength(1);
-  expect(getByRole('checkbox')).toBeChecked();
+  expect(screen.getAllByRole('listitem')).toHaveLength(1);
+  expect(
+    screen.getByRole('checkbox', { name: /Mark .* as undone/i }),
+  ).toBeChecked();
 });

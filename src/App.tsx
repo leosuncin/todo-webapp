@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Grid } from '@material-ui/core';
 
 import './App.scss';
 import Layout from './components/Layout';
 import AddTodo from './components/AddTodo';
 import TodoList from './components/TodoList';
-import TodoItem from './components/TodoItem';
+import FilterTodo, { FilterBy } from './components/FilterTodo';
 import { todoReducer, Todo } from './hooks/todoReducer';
 
 const App: React.FC = () => {
-  const [inputTodoValue, setInputTodoValue] = React.useState('');
   const [state, dispatch] = React.useReducer(todoReducer, { todos: [] });
+  const [filter, setFilter] = useState<FilterBy>('all');
+  const active = state.todos.filter((todo) => !todo.done);
+  const completed = state.todos.filter((todo) => todo.done);
 
   function handleCreateTodo(text: string) {
     if (text) {
@@ -17,51 +20,62 @@ const App: React.FC = () => {
         type: 'ADD_TODO',
         payload: text,
       });
-      setInputTodoValue('');
     }
   }
-  function handleToggleDone(todo: Todo) {
+  function handleEditTodo(id: Todo['id'], { text }: Pick<Todo, 'text'>) {
     dispatch({
-      type: 'TOGGLE_TODO',
+      type: 'UPDATE_TODO',
       payload: {
-        id: todo.id,
-        checked: !todo.checked,
+        id,
+        text,
       },
     });
   }
-  function handleDeleteTodo(todo: Todo) {
+  function handleToggleDone(id: Todo['id'], done: boolean) {
+    dispatch({
+      type: 'TOGGLE_TODO',
+      payload: {
+        id,
+        done,
+      },
+    });
+  }
+  function handleDeleteTodo(id: Todo['id']) {
     dispatch({
       type: 'REMOVE_TODO',
-      payload: todo.id,
+      payload: id,
     });
   }
 
   return (
     <Layout>
-      <AddTodo
-        text={inputTodoValue}
-        onChangeText={event => {
-          setInputTodoValue(event.target.value);
-        }}
-        onInputKeyPress={event => {
-          if (event.which === 13 || event.keyCode === 13) {
-            handleCreateTodo(inputTodoValue);
+      <Grid item sm={10} md={8} style={{ margin: '0 auto' }}>
+        <AddTodo onSubmit={({ text }) => handleCreateTodo(text)} />
+        <FilterTodo
+          all={state.todos.length}
+          active={active.length}
+          completed={completed.length}
+          filter={filter}
+          switchFilter={(filter) => setFilter(filter)}
+          onClearCompleted={() =>
+            completed
+              .filter((t) => t.done)
+              .map((todo) => handleDeleteTodo(todo.id))
           }
-        }}
-        onButtonClick={() => {
-          handleCreateTodo(inputTodoValue);
-        }}
-      />
-      <TodoList>
-        {state.todos.map(todo => (
-          <TodoItem
-            {...todo}
-            key={todo.id}
-            onToggleDone={handleToggleDone.bind(null, todo)}
-            onDeleteTodo={handleDeleteTodo.bind(null, todo)}
-          />
-        ))}
-      </TodoList>
+        />
+        <TodoList
+          todos={
+            filter === 'active'
+              ? active
+              : filter === 'completed'
+              ? completed
+              : state.todos
+          }
+          onChangeTodo={(id, body) => handleEditTodo(id, body)}
+          onToggleDone={(id, done) => handleToggleDone(id, done)}
+          onRemoveTodo={(id) => handleDeleteTodo(id)}
+        />
+      </Grid>
     </Layout>
   );
 };
