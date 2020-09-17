@@ -1,4 +1,10 @@
-import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
+import {
+  createSlice,
+  nanoid,
+  PayloadAction,
+  Selector,
+  CombinedState,
+} from '@reduxjs/toolkit';
 
 export type Todo = {
   id: string;
@@ -12,12 +18,14 @@ export type TodoState = {
   todos: Todo[];
 };
 
+export const TODO_KEY_FEATURE = 'todo';
+
 const initialState: TodoState = {
   todos: [],
 };
 
 const todoSlice = createSlice({
-  name: 'todo',
+  name: TODO_KEY_FEATURE,
   initialState,
   reducers: {
     addTodo(state: TodoState, action: PayloadAction<Todo['text']>) {
@@ -62,5 +70,10 @@ export const {
   updateTodo,
   removeTodo,
 } = todoSlice.actions;
+
+export const todosSelector: Selector<
+  CombinedState<Record<typeof TODO_KEY_FEATURE, TodoState>>,
+  Todo[]
+> = (state) => state[TODO_KEY_FEATURE].todos;
 
 export default todoSlice.reducer;

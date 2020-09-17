@@ -1,27 +1,30 @@
 import { Grid, List, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import AddTodo from '../components/AddTodo';
 import FilterTodo, { FilterBy } from '../components/FilterTodo';
 import TodoItem from '../components/TodoItem';
-import todoReducer, {
+import {
   addTodo,
   removeTodo,
+  todosSelector,
   toggleTodo,
   updateTodo,
 } from '../slices/todoSlice';
 
 const TodoList: React.FC = () => {
-  const [state, dispatch] = React.useReducer(todoReducer, { todos: [] });
+  const dispatch = useDispatch();
+  const todos = useSelector(todosSelector);
   const [filter, setFilter] = useState<FilterBy>('all');
-  const active = state.todos.filter((todo) => !todo.done);
-  const completed = state.todos.filter((todo) => todo.done);
+  const active = todos.filter((todo) => !todo.done);
+  const completed = todos.filter((todo) => todo.done);
 
   return (
     <Grid item sm={10} md={8} style={{ margin: '0 auto' }}>
       <AddTodo onSubmit={({ text }) => dispatch(addTodo(text))} />
       <FilterTodo
-        all={state.todos.length}
+        all={todos.length}
         active={active.length}
         completed={completed.length}
         filter={filter}
@@ -34,7 +37,7 @@ const TodoList: React.FC = () => {
       />
       <Grid item>
         <List aria-label="List of todo">
-          {state.todos.length < 1 ? (
+          {todos.length < 1 ? (
             <Typography
               variant="h5"
               color="textSecondary"
@@ -44,7 +47,7 @@ const TodoList: React.FC = () => {
               The list of todo will appear here.
             </Typography>
           ) : (
-            state.todos.map((todo, idx) => (
+            todos.map((todo, idx) => (
               <TodoItem
                 key={todo.id}
                 todo={todo}
