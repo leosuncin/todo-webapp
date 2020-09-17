@@ -1,37 +1,42 @@
 // also exported from '@storybook/react' if you can deal with breaking changes in 6.1
-import { Story, Meta } from '@storybook/react/types-6-0';
-import { action } from '@storybook/addon-actions';
+import { Meta, Story } from '@storybook/react/types-6-0';
 import React from 'react';
 
-import Layout from './Layout';
-import AddTodo from './AddTodo';
-import TodoList from './TodoList';
-import TodoItem from './TodoItem';
-
-import { todos } from './TodoList.stories';
+import AddTodo, { AddTodoProps } from './AddTodo';
+import * as AddTodoStories from './AddTodo.stories';
+import FilterTodo, { FilterTodoProps } from './FilterTodo';
+import * as FilterTodoStories from './FilterTodo.stories';
+import Layout, { LayoutProps } from './Layout';
+import TodoList, { TodoListProps } from './TodoList';
+import * as TodoListStories from './TodoList.stories';
 
 export default {
   title: 'Todo/Layout',
   component: Layout,
+  subcomponents: { AddTodo, FilterTodo, TodoList },
 } as Meta;
 
-export const Default: Story = () => (
-  <Layout>
-    <AddTodo
-      text=""
-      onChangeText={action('change-text')}
-      onInputKeyPress={action('input-key-press')}
-      onButtonClick={action('button-click')}
+export const Empty: Story<LayoutProps> = (args) => (
+  <Layout {...args}>
+    <div></div>
+  </Layout>
+);
+
+export const TodoApp: Story<LayoutProps> = (args) => (
+  <Layout {...args}>
+    <AddTodo {...(AddTodoStories.Default.args! as AddTodoProps)} />
+    <FilterTodo
+      {...(FilterTodoStories.Empty.args as FilterTodoProps)}
+      all={TodoListStories.WithItems.args!.todos!.length}
+      active={TodoListStories.WithItems.args!.todos!.reduce(
+        (count, todo) => count + Number(!todo.done),
+        0,
+      )}
+      completed={TodoListStories.WithItems.args!.todos!.reduce(
+        (count, todo) => count + Number(todo.done),
+        0,
+      )}
     />
-    <TodoList>
-      {todos.map((todo, idx) => (
-        <TodoItem
-          key={idx}
-          {...todo}
-          onToggleDone={action('toggle-done')}
-          onDeleteTodo={action('delete-todo')}
-        />
-      ))}
-    </TodoList>
+    <TodoList {...(TodoListStories.WithItems.args! as TodoListProps)} />
   </Layout>
 );

@@ -1,17 +1,25 @@
-import { Paper, AppBar, Toolbar, Typography } from '@material-ui/core';
+import {
+  AppBar,
+  Container,
+  Paper,
+  Toolbar,
+  Typography,
+} from '@material-ui/core';
 import React from 'react';
 
-const Layout: React.FC = ({ children }) => (
+export type LayoutProps = { title?: string };
+
+const Layout: React.FC<LayoutProps> = ({ children, title = 'TODO APP' }) => (
   <Paper
     elevation={0}
     style={{ padding: 0, margin: 0, backgroundColor: '#fafafa' }}
   >
     <AppBar color="primary" position="static" style={{ height: 64 }}>
       <Toolbar style={{ height: 64 }}>
-        <Typography color="inherit">TODO APP</Typography>
+        <Typography color="inherit">{title}</Typography>
       </Toolbar>
     </AppBar>
-    {children}
+    <Container maxWidth="md">{children as any}</Container>
   </Paper>
 );
 
