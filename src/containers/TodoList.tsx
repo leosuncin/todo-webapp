@@ -4,7 +4,12 @@ import React, { useState } from 'react';
 import AddTodo from '../components/AddTodo';
 import FilterTodo, { FilterBy } from '../components/FilterTodo';
 import TodoItem from '../components/TodoItem';
-import { Todo, todoReducer } from '../hooks/todoReducer';
+import todoReducer, {
+  addTodo,
+  removeTodo,
+  toggleTodo,
+  updateTodo,
+} from '../slices/todoSlice';
 
 const TodoList: React.FC = () => {
   const [state, dispatch] = React.useReducer(todoReducer, { todos: [] });
@@ -12,41 +17,9 @@ const TodoList: React.FC = () => {
   const active = state.todos.filter((todo) => !todo.done);
   const completed = state.todos.filter((todo) => todo.done);
 
-  function handleCreateTodo(text: string) {
-    if (text) {
-      dispatch({
-        type: 'ADD_TODO',
-        payload: text,
-      });
-    }
-  }
-  function handleEditTodo(id: Todo['id'], { text }: Pick<Todo, 'text'>) {
-    dispatch({
-      type: 'UPDATE_TODO',
-      payload: {
-        id,
-        text,
-      },
-    });
-  }
-  function handleToggleDone(id: Todo['id'], done: boolean) {
-    dispatch({
-      type: 'TOGGLE_TODO',
-      payload: {
-        id,
-        done,
-      },
-    });
-  }
-  function handleDeleteTodo(id: Todo['id']) {
-    dispatch({
-      type: 'REMOVE_TODO',
-      payload: id,
-    });
-  }
   return (
     <Grid item sm={10} md={8} style={{ margin: '0 auto' }}>
-      <AddTodo onSubmit={({ text }) => handleCreateTodo(text)} />
+      <AddTodo onSubmit={({ text }) => dispatch(addTodo(text))} />
       <FilterTodo
         all={state.todos.length}
         active={active.length}
@@ -56,7 +29,7 @@ const TodoList: React.FC = () => {
         onClearCompleted={() =>
           completed
             .filter((t) => t.done)
-            .map((todo) => handleDeleteTodo(todo.id))
+            .map((todo) => dispatch(removeTodo(todo.id)))
         }
       />
       <Grid item>
@@ -75,9 +48,11 @@ const TodoList: React.FC = () => {
               <TodoItem
                 key={todo.id}
                 todo={todo}
-                onChangeTodo={(id, body) => handleEditTodo(id, body)}
-                onToggleDone={(id, done) => handleToggleDone(id, done)}
-                onRemoveTodo={(id) => handleDeleteTodo(id)}
+                onChangeTodo={(id, { text }) =>
+                  dispatch(updateTodo({ text, id }))
+                }
+                onToggleDone={(id, done) => dispatch(toggleTodo({ id, done }))}
+                onRemoveTodo={(id) => dispatch(removeTodo(id))}
               />
             ))
           )}

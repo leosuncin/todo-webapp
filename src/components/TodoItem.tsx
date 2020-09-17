@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react';
 
 import { formatRelativeTime } from '../formatRelativeTime';
 import { validations } from './AddTodo';
-import { Todo } from '../hooks/todoReducer';
+import { Todo } from '../slices/todoSlice';
 
 export type TodoItemProps = {
   todo: Todo;
@@ -107,10 +107,10 @@ const TodoItem: React.FC<TodoItemProps> = ({
             todo.text
           )
         }
-        secondary={formatRelativeTime(todo.done ? todo.doneAt : todo.createdAt)}
+        secondary={formatRelativeTime(todo.done ? todo.doneAt! : todo.createdAt)}
         secondaryTypographyProps={{
           component: 'time',
-          dateTime: todo.done ? todo.doneAt : todo.createdAt,
+          dateTime: todo.done ? todo.doneAt?.toISOString() : todo.createdAt.toISOString(),
         }}
         onDoubleClick={() => setIsEditing((prevIsEditing) => !prevIsEditing)}
       />
