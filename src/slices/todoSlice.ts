@@ -1,10 +1,12 @@
 import {
+  CombinedState,
+  createSelector,
   createSlice,
   nanoid,
   PayloadAction,
   Selector,
-  CombinedState,
 } from '@reduxjs/toolkit';
+import { filterSelector } from './filterSlice';
 
 export type Todo = {
   id: string;
@@ -61,6 +63,9 @@ const todoSlice = createSlice({
     removeTodo(state: TodoState, action: PayloadAction<Todo['id']>) {
       state.todos = state.todos.filter((todo) => todo.id !== action.payload);
     },
+    clearCompleted(state: TodoState) {
+      state.todos = state.todos.filter((t) => !t.done);
+    },
   },
 });
 
@@ -69,11 +74,37 @@ export const {
   toggleTodo,
   updateTodo,
   removeTodo,
+  clearCompleted,
 } = todoSlice.actions;
 
 export const todosSelector: Selector<
   CombinedState<Record<typeof TODO_KEY_FEATURE, TodoState>>,
   Todo[]
 > = (state) => state[TODO_KEY_FEATURE].todos;
+
+export const allCountSelector = createSelector(
+  todosSelector,
+  (todos) => todos.length,
+);
+
+export const completedCountSelector = createSelector(todosSelector, (todos) =>
+  todos.reduce((count, todo) => count + (todo.done ? 1 : 0), 0),
+);
+
+export const activeCountSelector = createSelector(
+  allCountSelector,
+  completedCountSelector,
+  (all, completed) => all - completed,
+);
+
+export const displayTodosSelector = createSelector(
+  filterSelector,
+  todosSelector,
+  (filter, todos) => {
+    if (filter === 'active') return todos.filter((todo) => !todo.done);
+    if (filter === 'completed') return todos.filter((todo) => todo.done);
+    return todos;
+  },
+);
 
 export default todoSlice.reducer;
