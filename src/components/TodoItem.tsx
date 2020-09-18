@@ -107,10 +107,14 @@ const TodoItem: React.FC<TodoItemProps> = ({
             todo.text
           )
         }
-        secondary={formatRelativeTime(todo.done ? todo.doneAt! : todo.createdAt)}
+        secondary={formatRelativeTime(
+          todo.done ? todo.doneAt! : todo.createdAt,
+        )}
         secondaryTypographyProps={{
           component: 'time',
-          dateTime: todo.done ? todo.doneAt?.toISOString() : todo.createdAt.toISOString(),
+          dateTime: new Date(
+            todo.done ? todo.doneAt! : todo.createdAt,
+          ).toISOString(),
         }}
         onDoubleClick={() => setIsEditing((prevIsEditing) => !prevIsEditing)}
       />

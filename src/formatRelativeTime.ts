@@ -1,4 +1,4 @@
-export function formatRelativeTime(pastDate: Date | string): string {
+export function formatRelativeTime(pastDate: Date | number): string {
   const relativeTime = new Intl.RelativeTimeFormat('en', { style: 'narrow' });
   const diff = new Date(pastDate).getTime() - new Date().getTime();
   let rt = Math.ceil(diff / 1e3);

@@ -12,8 +12,8 @@ export type Todo = {
   id: string;
   text: string;
   done: boolean;
-  createdAt: Date;
-  doneAt?: Date;
+  createdAt: number;
+  doneAt?: number;
 };
 
 export type TodoState = {
@@ -35,7 +35,7 @@ const todoSlice = createSlice({
         id: nanoid(),
         text: action.payload,
         done: false,
-        createdAt: new Date(),
+        createdAt: Date.now(),
       });
     },
     toggleTodo(
@@ -50,7 +50,7 @@ const todoSlice = createSlice({
       if (todo.done === action.payload.done) return;
 
       todo.done = action.payload.done;
-      todo.doneAt = action.payload.done ? new Date() : undefined;
+      todo.doneAt = action.payload.done ? Date.now() : undefined;
     },
     updateTodo(
       state: TodoState,
