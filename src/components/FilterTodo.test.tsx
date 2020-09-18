@@ -1,7 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import FilterTodo, { FilterBy } from './FilterTodo';
 import React from 'react';
+
+import { FilterBy } from '../slices/filterSlice';
+import FilterTodo from './FilterTodo';
 
 /**
  * Shuffles array in place.

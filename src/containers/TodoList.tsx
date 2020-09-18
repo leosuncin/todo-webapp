@@ -1,43 +1,45 @@
 import { Grid, List, Typography } from '@material-ui/core';
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import AddTodo from '../components/AddTodo';
-import FilterTodo, { FilterBy } from '../components/FilterTodo';
+import FilterTodo from '../components/FilterTodo';
 import TodoItem from '../components/TodoItem';
+import { filterSelector, switchFilter } from '../slices/filterSlice';
 import {
+  activeCountSelector,
   addTodo,
+  allCountSelector,
+  clearCompleted,
+  completedCountSelector,
+  displayTodosSelector,
   removeTodo,
-  todosSelector,
   toggleTodo,
   updateTodo,
 } from '../slices/todoSlice';
 
 const TodoList: React.FC = () => {
   const dispatch = useDispatch();
-  const todos = useSelector(todosSelector);
-  const [filter, setFilter] = useState<FilterBy>('all');
-  const active = todos.filter((todo) => !todo.done);
-  const completed = todos.filter((todo) => todo.done);
+  const todos = useSelector(displayTodosSelector);
+  const all = useSelector(allCountSelector);
+  const active = useSelector(activeCountSelector);
+  const completed = useSelector(completedCountSelector);
+  const filter = useSelector(filterSelector);
 
   return (
     <Grid item sm={10} md={8} style={{ margin: '0 auto' }}>
       <AddTodo onSubmit={({ text }) => dispatch(addTodo(text))} />
       <FilterTodo
-        all={todos.length}
-        active={active.length}
-        completed={completed.length}
+        all={all}
+        active={active}
+        completed={completed}
         filter={filter}
-        switchFilter={(filter) => setFilter(filter)}
-        onClearCompleted={() =>
-          completed
-            .filter((t) => t.done)
-            .map((todo) => dispatch(removeTodo(todo.id)))
-        }
+        switchFilter={(filter) => dispatch(switchFilter(filter))}
+        onClearCompleted={() => dispatch(clearCompleted())}
       />
       <Grid item>
         <List aria-label="List of todo">
-          {todos.length < 1 ? (
+          {all < 1 ? (
             <Typography
               variant="h5"
               color="textSecondary"
