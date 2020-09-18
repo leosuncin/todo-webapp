@@ -1,78 +1,241 @@
+import { Reducer, Selector } from 'redux-testkit';
+
+import { FILTER_KEY_FEATURE } from './filterSlice';
 import todoReducer, {
+  activeCountSelector,
   addTodo,
+  allCountSelector,
+  clearCompleted,
+  completedCountSelector,
+  displayTodosSelector,
   removeTodo,
-  TodoState,
+  TODO_KEY_FEATURE,
   toggleTodo,
   updateTodo,
 } from './todoSlice';
 
 describe('todoSlice', () => {
-  it(addTodo.toString(), () => {
-    const state = { todos: [] };
-    const nextState = todoReducer(state, addTodo('Make a sandwich'));
+  describe('reducer', () => {
+    it(`should handle "${addTodo}" action`, () => {
+      Reducer(todoReducer)
+        .expect(addTodo('Make a sandwich'))
+        .toReturnState({
+          todos: [
+            {
+              id: expect.any(String),
+              text: 'Make a sandwich',
+              done: false,
+              createdAt: expect.any(Date),
+            },
+          ],
+        });
+    });
 
-    expect(nextState.todos).toHaveLength(1);
+    it(`should handle "${removeTodo}" action`, () => {
+      Reducer(todoReducer)
+        .withState({
+          todos: [
+            {
+              id: 'bcf13961-75a5-44a4-9ed6-2c15d25424ae',
+              text: 'Make a salad',
+              done: true,
+              createdAt: new Date('2020-06-01T20:00:00.000Z'),
+              doneAt: new Date('2020-06-01T22:00:00.000Z'),
+            },
+          ],
+        })
+        .expect(removeTodo('bcf13961-75a5-44a4-9ed6-2c15d25424ae'))
+        .toReturnState({ todos: [] });
+    });
+
+    it(`should handle "${toggleTodo}" action`, () => {
+      Reducer(todoReducer)
+        .withState({
+          todos: [
+            {
+              id: '66459160-2390-4532-900b-8399586ac2c5',
+              text: 'Make a sandwich',
+              done: false,
+              createdAt: new Date('2020-06-01T18:30:00.000Z'),
+            },
+          ],
+        })
+        .expect(
+          toggleTodo({
+            id: '66459160-2390-4532-900b-8399586ac2c5',
+            done: true,
+          }),
+        )
+        .toReturnState({
+          todos: [
+            {
+              id: '66459160-2390-4532-900b-8399586ac2c5',
+              text: 'Make a sandwich',
+              done: true,
+              createdAt: new Date('2020-06-01T18:30:00.000Z'),
+              doneAt: expect.any(Date),
+            },
+          ],
+        });
+    });
+
+    it(`should handle "${updateTodo}" action`, () => {
+      Reducer(todoReducer)
+        .withState({
+          todos: [
+            {
+              id: '66459160-2390-4532-900b-8399586ac2c5',
+              text: 'Make a sandwich',
+              done: false,
+              createdAt: new Date('2020-06-01T18:30:00.000Z'),
+            },
+          ],
+        })
+        .expect(
+          updateTodo({
+            id: '66459160-2390-4532-900b-8399586ac2c5',
+            text: 'Make a salad',
+          }),
+        )
+        .toReturnState({
+          todos: [
+            {
+              id: '66459160-2390-4532-900b-8399586ac2c5',
+              text: 'Make a salad',
+              done: false,
+              createdAt: new Date('2020-06-01T18:30:00.000Z'),
+            },
+          ],
+        });
+    });
+
+    it(`should handle "${clearCompleted}" action`, () => {
+      Reducer(todoReducer)
+        .withState({
+          todos: [
+            {
+              id: '66459160-2390-4532-900b-8399586ac2c5',
+              text: 'Make a sandwich',
+              done: false,
+              createdAt: new Date('2020-06-01T20:30:00.000Z'),
+            },
+            {
+              id: 'bcf13961-75a5-44a4-9ed6-2c15d25424ae',
+              text: 'Make a salad',
+              done: true,
+              createdAt: new Date('2020-06-01T20:00:00.000Z'),
+              doneAt: new Date('2020-06-01T22:00:00.000Z'),
+            },
+          ],
+        })
+        .expect(clearCompleted())
+        .toReturnState({
+          todos: [
+            {
+              id: '66459160-2390-4532-900b-8399586ac2c5',
+              text: 'Make a sandwich',
+              done: false,
+              createdAt: new Date('2020-06-01T20:30:00.000Z'),
+            },
+          ],
+        });
+
+      Reducer(todoReducer)
+        .withState({ todos: [] })
+        .expect(clearCompleted())
+        .toChangeInState({}); // Use empty changes due wix/redux-testkit#14
+    });
   });
 
-  it(removeTodo.toString(), () => {
-    const state: TodoState = {
-      todos: [
-        {
-          id: 'bcf13961-75a5-44a4-9ed6-2c15d25424ae',
-          text: 'Make a salad',
-          done: true,
-          createdAt: new Date('2020-06-01T20:00:00.000Z'),
-          doneAt: new Date('2020-06-01T22:00:00.000Z'),
+  describe('selector', () => {
+    it('should select the counts from state', () => {
+      const rootState = {
+        [TODO_KEY_FEATURE]: {
+          todos: [
+            {
+              id: '66459160-2390-4532-900b-8399586ac2c5',
+              text: 'Make a sandwich',
+              done: false,
+              createdAt: new Date('2020-06-01T20:30:00.000Z'),
+            },
+            {
+              id: 'bcf13961-75a5-44a4-9ed6-2c15d25424ae',
+              text: 'Make a salad',
+              done: true,
+              createdAt: new Date('2020-06-01T20:00:00.000Z'),
+              doneAt: new Date('2020-06-01T22:00:00.000Z'),
+            },
+          ],
         },
-      ],
-    };
-    const nextState = todoReducer(
-      state,
-      removeTodo('bcf13961-75a5-44a4-9ed6-2c15d25424ae'),
-    );
+      };
 
-    expect(nextState.todos).toHaveLength(0);
-  });
+      Selector(allCountSelector).expect(rootState).toReturn(2);
+      Selector(completedCountSelector).expect(rootState).toReturn(1);
+      Selector(activeCountSelector).expect(rootState).toReturn(1);
+    });
 
-  it(toggleTodo.toString(), () => {
-    const state: TodoState = {
-      todos: [
-        {
-          id: '66459160-2390-4532-900b-8399586ac2c5',
-          text: 'Make a sandwich',
-          done: false,
-          createdAt: new Date('2020-06-01T18:30:00.000Z'),
+    it('should select the displayed todo', () => {
+      const rootState = {
+        [TODO_KEY_FEATURE]: {
+          todos: [
+            {
+              id: '66459160-2390-4532-900b-8399586ac2c5',
+              text: 'Make a sandwich',
+              done: false,
+              createdAt: new Date('2020-06-01T20:30:00.000Z'),
+            },
+            {
+              id: 'bcf13961-75a5-44a4-9ed6-2c15d25424ae',
+              text: 'Make a salad',
+              done: true,
+              createdAt: new Date('2020-06-01T20:00:00.000Z'),
+              doneAt: new Date('2020-06-01T22:00:00.000Z'),
+            },
+          ],
         },
-      ],
-    };
-    const nextState = todoReducer(
-      state,
-      toggleTodo({ id: '66459160-2390-4532-900b-8399586ac2c5', done: true }),
-    );
-
-    expect(nextState.todos[0]).toHaveProperty('done', true);
-    expect(nextState.todos[0]).toHaveProperty('doneAt');
-  });
-
-  it(updateTodo.toString(), () => {
-    const state: TodoState = {
-      todos: [
-        {
-          id: '66459160-2390-4532-900b-8399586ac2c5',
-          text: 'Make a sandwich',
-          done: false,
-          createdAt: new Date('2020-06-01T18:30:00.000Z'),
+        [FILTER_KEY_FEATURE]: {
+          filter: 'all',
         },
-      ],
-    };
-    const nextState = todoReducer(
-      state,
-      updateTodo({
-        id: '66459160-2390-4532-900b-8399586ac2c5',
-        text: 'Make a salad',
-      }),
-    );
+      };
 
-    expect(nextState.todos[0]).toHaveProperty('text', 'Make a salad');
+      Selector(displayTodosSelector)
+        .expect(rootState)
+        .toReturn([
+          {
+            id: '66459160-2390-4532-900b-8399586ac2c5',
+            text: 'Make a sandwich',
+            done: false,
+            createdAt: new Date('2020-06-01T20:30:00.000Z'),
+          },
+          {
+            id: 'bcf13961-75a5-44a4-9ed6-2c15d25424ae',
+            text: 'Make a salad',
+            done: true,
+            createdAt: new Date('2020-06-01T20:00:00.000Z'),
+            doneAt: new Date('2020-06-01T22:00:00.000Z'),
+          },
+        ]);
+      Selector(displayTodosSelector)
+        .expect({ ...rootState, [FILTER_KEY_FEATURE]: { filter: 'completed' } })
+        .toReturn([
+          {
+            id: 'bcf13961-75a5-44a4-9ed6-2c15d25424ae',
+            text: 'Make a salad',
+            done: true,
+            createdAt: new Date('2020-06-01T20:00:00.000Z'),
+            doneAt: new Date('2020-06-01T22:00:00.000Z'),
+          },
+        ]);
+      Selector(displayTodosSelector)
+        .expect({ ...rootState, [FILTER_KEY_FEATURE]: { filter: 'active' } })
+        .toReturn([
+          {
+            id: '66459160-2390-4532-900b-8399586ac2c5',
+            text: 'Make a sandwich',
+            done: false,
+            createdAt: new Date('2020-06-01T20:30:00.000Z'),
+          },
+        ]);
+    });
   });
 });
