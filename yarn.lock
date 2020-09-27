@@ -2003,14 +2003,14 @@
     ts-dedent "^1.1.1"
 
 "@storybook/addon-storyshots@^6.0.21":
-  version "6.0.21"
-  resolved "https://registry.yarnpkg.com/@storybook/addon-storyshots/-/addon-storyshots-6.0.21.tgz#31c528449fe02e48bcd8756f84697419c63ca0e2"
-  integrity sha512-nWJlJ5uAUrnO2PLrsTKsLRbqXODH/9I7MaIRDFGgho3prqd8H7W5jksP0XCxa/SDRgmY3jJ+R1qCVnsRZV/Bow==
+  version "6.0.22"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-storyshots/-/addon-storyshots-6.0.22.tgz#96e201be5f108c347a9b129cb6a43a26480f593f"
+  integrity sha512-l4h5OTwbORwdi2GxAOzCF3avmGwbxdJFmXgagzq74iHooCE/H7FF3VfY1vu3ZXWz5LTqe5INNJyfhwHxocntpg==
   dependencies:
     "@jest/transform" "^26.0.0"
-    "@storybook/addons" "6.0.21"
-    "@storybook/client-api" "6.0.21"
-    "@storybook/core" "6.0.21"
+    "@storybook/addons" "6.0.22"
+    "@storybook/client-api" "6.0.22"
+    "@storybook/core" "6.0.22"
     "@types/glob" "^7.1.1"
     "@types/jest" "^25.1.1"
     "@types/jest-specific-snapshot" "^0.5.3"
