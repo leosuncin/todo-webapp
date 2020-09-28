@@ -36,6 +36,7 @@
     "eslint-plugin-cypress": "^2.11.1",
     "husky": "^4.3.0",
     "lint-staged": "^10.3.0",
+    "loki": "^0.25.1",
     "mutationobserver-shim": "^0.3.7",
     "prettier": "^2.1.1",
     "react-is": "^16.13.1",
@@ -96,5 +97,20 @@
     "*.{json,md}": [
       "yarn format"
     ]
+  },
+  "loki": {
+    "configurations": {
+      "chrome.laptop": {
+        "target": "chrome.app",
+        "width": 1366,
+        "height": 768,
+        "deviceScaleFactor": 1,
+        "mobile": false
+      },
+      "chrome.iphone7": {
+        "target": "chrome.app",
+        "preset": "iPhone 7"
+      }
+    }
   }
 }
