@@ -703,7 +703,7 @@ exports[`Storyshots Todo/Todo Item Todo Done 1`] = `
         className="MuiTypography-root MuiListItemText-secondary MuiTypography-body2 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
         dateTime="2020-06-01T22:00:00.000Z"
       >
-        3 mo. ago
+        4 mo. ago
       </time>
     </div>
   </div>
@@ -827,7 +827,7 @@ exports[`Storyshots Todo/Todo Item Todo Pending 1`] = `
         className="MuiTypography-root MuiListItemText-secondary MuiTypography-body2 MuiTypography-colorTextSecondary MuiTypography-displayBlock"
         dateTime="2020-06-01T18:30:00.000Z"
       >
-        3 mo. ago
+        4 mo. ago
       </time>
     </div>
   </div>
