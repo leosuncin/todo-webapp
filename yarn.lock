@@ -2655,7 +2655,7 @@
   dependencies:
     lodash "^4.17.15"
 
-"@storybook/node-logger@6.0.25", "@storybook/node-logger@^6.0.21":
+"@storybook/node-logger@6.0.25":
   version "6.0.25"
   resolved "https://registry.yarnpkg.com/@storybook/node-logger/-/node-logger-6.0.25.tgz#cc110ae5c5c2dfa39446370045815d4ff7a50d0b"
   integrity sha512-NFA71KnCgj6WIBT/HY+Bn4RpK5AeGS4wob2X6tT05qDuIlWbryVwr0cQYUBt3TqGBqiJpFIGGPbyqmSGGMfN5w==
@@ -2666,7 +2666,7 @@
     npmlog "^4.1.2"
     pretty-hrtime "^1.0.3"
 
-"@storybook/node-logger@6.0.26":
+"@storybook/node-logger@6.0.26", "@storybook/node-logger@^6.0.21":
   version "6.0.26"
   resolved "https://registry.yarnpkg.com/@storybook/node-logger/-/node-logger-6.0.26.tgz#2ef95ea1e2defd4efcba6b23431ea5c5cbaa110b"
   integrity sha512-mdILu91d/2ZgYfICoAMBjwBAYOgjk2URsPudrs5+23lFoPPIwf4CPWcfgs0f4GdfoICk3kV0W7+8bIARhRKp3g==
@@ -2697,15 +2697,15 @@
     semver "^7.3.2"
 
 "@storybook/react@^6.0.21":
-  version "6.0.25"
-  resolved "https://registry.yarnpkg.com/@storybook/react/-/react-6.0.25.tgz#4452414cad5fbb783b447fa289d46c825dc8ad78"
-  integrity sha512-2vhWAi5il9PuM/4lhAWLDbO8iB3SNSyBTUDtNQMNoO45iGr07cpaG3g1CkXFKz4I7NeiUqYM8NWlMNxjR9UiMw==
+  version "6.0.26"
+  resolved "https://registry.yarnpkg.com/@storybook/react/-/react-6.0.26.tgz#5d4b8f2c6d8003912d371298a6e5a945e24680b4"
+  integrity sha512-X02VpIEhpVc4avYiff861c015++tvMVSXJSrDP5J1xTAglVEiRFcU0Kn5h96o9N8FTup2n2xyj6Y7e8oC9yLXQ==
   dependencies:
     "@babel/preset-flow" "^7.0.0"
     "@babel/preset-react" "^7.0.0"
-    "@storybook/addons" "6.0.25"
-    "@storybook/core" "6.0.25"
-    "@storybook/node-logger" "6.0.25"
+    "@storybook/addons" "6.0.26"
+    "@storybook/core" "6.0.26"
+    "@storybook/node-logger" "6.0.26"
     "@storybook/semver" "^7.3.2"
     "@svgr/webpack" "^5.4.0"
     "@types/webpack-env" "^1.15.2"
