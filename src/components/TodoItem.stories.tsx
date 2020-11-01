@@ -1,6 +1,7 @@
 // also exported from '@storybook/react' if you can deal with breaking changes in 6.1
 import { Meta, Story } from '@storybook/react/types-6-0';
 import React from 'react';
+import { advanceTo } from 'jest-date-mock';
 
 import TodoItem, { TodoItemProps } from './TodoItem';
 
@@ -8,6 +9,8 @@ export default {
   title: 'Todo/Todo Item',
   component: TodoItem,
 } as Meta<TodoItemProps>;
+
+advanceTo(new Date(2020, 9, 4, 2, 13, 0, 0));
 
 const Template: Story<TodoItemProps> = (args) => <TodoItem {...args} />;
 
