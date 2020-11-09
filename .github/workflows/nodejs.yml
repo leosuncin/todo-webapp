@@ -12,6 +12,8 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         eslint_flags: --ext '.js,.ts,.tsx' .
+      env:
+        NODE_OPTIONS: '--max-old-space-size=8192'
 
   test-unit:
     name: Run unit, smoke and integration tests
