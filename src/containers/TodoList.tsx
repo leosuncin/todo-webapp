@@ -44,6 +44,19 @@ const TodoList: React.FC = () => {
       payload: id,
     });
   }
+  function getTodos(): Todo[] {
+    switch (filter) {
+      case 'active':
+        return active;
+
+      case 'completed':
+        return completed;
+
+      default:
+        return state.todos;
+    }
+  }
+
   return (
     <Grid item sm={10} md={8} style={{ margin: '0 auto' }}>
       <AddTodo onSubmit={({ text }) => handleCreateTodo(text)} />
@@ -71,7 +84,7 @@ const TodoList: React.FC = () => {
               The list of todo will appear here.
             </Typography>
           ) : (
-            state.todos.map((todo, idx) => (
+            getTodos().map((todo, idx) => (
               <TodoItem
                 key={todo.id}
                 todo={todo}
