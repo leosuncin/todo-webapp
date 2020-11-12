@@ -18,6 +18,11 @@ type AddTodoAction = {
   payload: Todo['text'];
 };
 
+type SetTodosAction = {
+  type: 'SET_TODOS';
+  payload: Todo[];
+};
+
 type RemoveTodoAction = {
   type: 'REMOVE_TODO';
   payload: Todo['id'];
@@ -35,6 +40,7 @@ type UpdateTodoAction = {
 
 type TodoAction =
   | AddTodoAction
+  | SetTodosAction
   | RemoveTodoAction
   | ToggleTodoAction
   | UpdateTodoAction;
@@ -56,6 +62,10 @@ export function todoReducer(state: TodoState, action: TodoAction): TodoState {
           },
           ...state.todos,
         ],
+      };
+    case 'SET_TODOS':
+      return {
+        todos: action.payload,
       };
     case 'REMOVE_TODO':
       return {

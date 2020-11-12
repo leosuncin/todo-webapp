@@ -1,6 +1,7 @@
 import { Grid, List, Typography } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
+import { getAllTodos } from '../api/client';
 import AddTodo from '../components/AddTodo';
 import FilterTodo, { FilterBy } from '../components/FilterTodo';
 import TodoItem from '../components/TodoItem';
@@ -11,6 +12,20 @@ const TodoList: React.FC = () => {
   const [filter, setFilter] = useState<FilterBy>('all');
   const active = state.todos.filter((todo) => !todo.done);
   const completed = state.todos.filter((todo) => todo.done);
+  const fetchAllTodos = useCallback(async (signal?: AbortSignal) => {
+    try {
+      const todos = await getAllTodos({ signal });
+      dispatch({ type: 'SET_TODOS', payload: todos });
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    const ctrl = new AbortController();
+
+    fetchAllTodos(ctrl.signal);
+
+    return () => ctrl.abort();
+  }, [fetchAllTodos]);
 
   function handleCreateTodo(text: string) {
     if (text) {
