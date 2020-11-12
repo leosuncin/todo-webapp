@@ -1,4 +1,4 @@
-import type { Todo } from '../hooks/todoReducer';
+import type { Todo } from '../slices/todoSlice';
 import type { CreateTodo, EditTodo, ErrorResponse } from '../mocks/handlers';
 
 export class HttpError extends Error implements ErrorResponse {
