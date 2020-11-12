@@ -1,6 +1,8 @@
+import { CombinedState } from '@reduxjs/toolkit';
 import { Reducer, Selector } from 'redux-testkit';
 
-import { FILTER_KEY_FEATURE } from './filterSlice';
+import type { FilterState, FILTER_KEY_FEATURE } from './filterSlice';
+import type { TodoState, TODO_KEY_FEATURE } from './todoSlice';
 import todoReducer, {
   activeCountSelector,
   addTodo,
@@ -9,7 +11,6 @@ import todoReducer, {
   completedCountSelector,
   displayTodosSelector,
   removeTodo,
-  TODO_KEY_FEATURE,
   toggleTodo,
   updateTodo,
 } from './todoSlice';
@@ -19,129 +20,135 @@ describe('todoSlice', () => {
     it(`should handle "${addTodo}" action`, () => {
       Reducer(todoReducer)
         .expect(addTodo('Make a sandwich'))
-        .toReturnState({
-          todos: [
-            {
-              id: expect.any(String),
-              text: 'Make a sandwich',
-              done: false,
-              createdAt: expect.any(Number),
-            },
-          ],
-        });
+        .toReturnState(
+          expect.objectContaining({
+            ids: expect.any(Array),
+            entities: expect.any(Object),
+          }),
+        );
     });
 
     it(`should handle "${removeTodo}" action`, () => {
+      const initialState: TodoState = {
+        ids: ['bcf13961-75a5-44a4-9ed6-2c15d25424ae'],
+        entities: {
+          'bcf13961-75a5-44a4-9ed6-2c15d25424ae': {
+            id: 'bcf13961-75a5-44a4-9ed6-2c15d25424ae',
+            text: 'Make a salad',
+            done: true,
+            createdAt: new Date('2020-06-01T20:00:00.000Z').getTime(),
+            doneAt: new Date('2020-06-01T22:00:00.000Z').getTime(),
+          },
+        },
+      };
+
       Reducer(todoReducer)
-        .withState({
-          todos: [
-            {
-              id: 'bcf13961-75a5-44a4-9ed6-2c15d25424ae',
-              text: 'Make a salad',
-              done: true,
-              createdAt: new Date('2020-06-01T20:00:00.000Z').getTime(),
-              doneAt: new Date('2020-06-01T22:00:00.000Z').getTime(),
-            },
-          ],
-        })
+        .withState(initialState)
         .expect(removeTodo('bcf13961-75a5-44a4-9ed6-2c15d25424ae'))
-        .toReturnState({ todos: [] });
+        .toReturnState({ ids: [], entities: {} });
     });
 
     it(`should handle "${toggleTodo}" action`, () => {
+      const initialState: TodoState = {
+        ids: ['66459160-2390-4532-900b-8399586ac2c5'],
+        entities: {
+          '66459160-2390-4532-900b-8399586ac2c5': {
+            id: '66459160-2390-4532-900b-8399586ac2c5',
+            text: 'Make a sandwich',
+            done: false,
+            createdAt: new Date('2020-06-01T18:30:00.000Z').getTime(),
+          },
+        },
+      };
+
       Reducer(todoReducer)
-        .withState({
-          todos: [
-            {
-              id: '66459160-2390-4532-900b-8399586ac2c5',
-              text: 'Make a sandwich',
-              done: false,
-              createdAt: new Date('2020-06-01T18:30:00.000Z'),
-            },
-          ],
-        })
+        .withState(initialState)
         .expect(
           toggleTodo({
             id: '66459160-2390-4532-900b-8399586ac2c5',
             done: true,
           }),
         )
-        .toReturnState({
-          todos: [
-            {
-              id: '66459160-2390-4532-900b-8399586ac2c5',
-              text: 'Make a sandwich',
+        .toChangeInState({
+          entities: {
+            '66459160-2390-4532-900b-8399586ac2c5': {
               done: true,
-              createdAt: new Date('2020-06-01T18:30:00.000Z'),
               doneAt: expect.any(Number),
             },
-          ],
+          },
         });
     });
 
     it(`should handle "${updateTodo}" action`, () => {
+      const initialState: TodoState = {
+        ids: ['66459160-2390-4532-900b-8399586ac2c5'],
+        entities: {
+          '66459160-2390-4532-900b-8399586ac2c5': {
+            id: '66459160-2390-4532-900b-8399586ac2c5',
+            text: 'Make a sandwich',
+            done: false,
+            createdAt: new Date('2020-06-01T18:30:00.000Z').getTime(),
+          },
+        },
+      };
+
       Reducer(todoReducer)
-        .withState({
-          todos: [
-            {
-              id: '66459160-2390-4532-900b-8399586ac2c5',
-              text: 'Make a sandwich',
-              done: false,
-              createdAt: new Date('2020-06-01T18:30:00.000Z'),
-            },
-          ],
-        })
+        .withState(initialState)
         .expect(
           updateTodo({
             id: '66459160-2390-4532-900b-8399586ac2c5',
             text: 'Make a salad',
           }),
         )
-        .toReturnState({
-          todos: [
-            {
-              id: '66459160-2390-4532-900b-8399586ac2c5',
+        .toChangeInState({
+          entities: {
+            '66459160-2390-4532-900b-8399586ac2c5': {
               text: 'Make a salad',
-              done: false,
-              createdAt: new Date('2020-06-01T18:30:00.000Z'),
             },
-          ],
+          },
         });
     });
 
     it(`should handle "${clearCompleted}" action`, () => {
+      const initialState: TodoState = {
+        ids: [
+          '66459160-2390-4532-900b-8399586ac2c5',
+          'bcf13961-75a5-44a4-9ed6-2c15d25424ae',
+        ],
+        entities: {
+          '66459160-2390-4532-900b-8399586ac2c5': {
+            id: '66459160-2390-4532-900b-8399586ac2c5',
+            text: 'Make a sandwich',
+            done: false,
+            createdAt: new Date('2020-06-01T20:30:00.000Z').getTime(),
+          },
+          'bcf13961-75a5-44a4-9ed6-2c15d25424ae': {
+            id: 'bcf13961-75a5-44a4-9ed6-2c15d25424ae',
+            text: 'Make a salad',
+            done: true,
+            createdAt: new Date('2020-06-01T20:00:00.000Z').getTime(),
+            doneAt: new Date('2020-06-01T22:00:00.000Z').getTime(),
+          },
+        },
+      };
+
       Reducer(todoReducer)
-        .withState({
-          todos: [
-            {
-              id: '66459160-2390-4532-900b-8399586ac2c5',
-              text: 'Make a sandwich',
-              done: false,
-              createdAt: new Date('2020-06-01T20:30:00.000Z').getTime(),
-            },
-            {
-              id: 'bcf13961-75a5-44a4-9ed6-2c15d25424ae',
-              text: 'Make a salad',
-              done: true,
-              createdAt: new Date('2020-06-01T20:00:00.000Z').getTime(),
-              doneAt: new Date('2020-06-01T22:00:00.000Z').getTime(),
-            },
-          ],
-        })
+        .withState(initialState)
         .expect(clearCompleted())
         .toReturnState({
-          todos: [
-            {
+          ids: ['66459160-2390-4532-900b-8399586ac2c5'],
+          entities: {
+            '66459160-2390-4532-900b-8399586ac2c5': {
               id: '66459160-2390-4532-900b-8399586ac2c5',
               text: 'Make a sandwich',
               done: false,
               createdAt: new Date('2020-06-01T20:30:00.000Z').getTime(),
             },
-          ],
+          },
         });
 
       Reducer(todoReducer)
-        .withState({ todos: [] })
+        .withState({ ids: [], entities: {} })
         .expect(clearCompleted())
         .toChangeInState({}); // Use empty changes due wix/redux-testkit#14
     });
@@ -149,23 +156,30 @@ describe('todoSlice', () => {
 
   describe('selector', () => {
     it('should select the counts from state', () => {
-      const rootState = {
-        [TODO_KEY_FEATURE]: {
-          todos: [
-            {
+      const rootState: CombinedState<Record<
+        typeof TODO_KEY_FEATURE,
+        TodoState
+      >> = {
+        todo: {
+          ids: [
+            '66459160-2390-4532-900b-8399586ac2c5',
+            'bcf13961-75a5-44a4-9ed6-2c15d25424ae',
+          ],
+          entities: {
+            '66459160-2390-4532-900b-8399586ac2c5': {
               id: '66459160-2390-4532-900b-8399586ac2c5',
               text: 'Make a sandwich',
               done: false,
               createdAt: new Date('2020-06-01T20:30:00.000Z').getTime(),
             },
-            {
+            'bcf13961-75a5-44a4-9ed6-2c15d25424ae': {
               id: 'bcf13961-75a5-44a4-9ed6-2c15d25424ae',
               text: 'Make a salad',
               done: true,
               createdAt: new Date('2020-06-01T20:00:00.000Z').getTime(),
               doneAt: new Date('2020-06-01T22:00:00.000Z').getTime(),
             },
-          ],
+          },
         },
       };
 
@@ -175,25 +189,32 @@ describe('todoSlice', () => {
     });
 
     it('should select the displayed todo', () => {
-      const rootState = {
-        [TODO_KEY_FEATURE]: {
-          todos: [
-            {
+      const rootState: CombinedState<
+        Record<typeof TODO_KEY_FEATURE, TodoState> &
+          Record<typeof FILTER_KEY_FEATURE, FilterState>
+      > = {
+        todo: {
+          ids: [
+            '66459160-2390-4532-900b-8399586ac2c5',
+            'bcf13961-75a5-44a4-9ed6-2c15d25424ae',
+          ],
+          entities: {
+            '66459160-2390-4532-900b-8399586ac2c5': {
               id: '66459160-2390-4532-900b-8399586ac2c5',
               text: 'Make a sandwich',
               done: false,
               createdAt: new Date('2020-06-01T20:30:00.000Z').getTime(),
             },
-            {
+            'bcf13961-75a5-44a4-9ed6-2c15d25424ae': {
               id: 'bcf13961-75a5-44a4-9ed6-2c15d25424ae',
               text: 'Make a salad',
               done: true,
               createdAt: new Date('2020-06-01T20:00:00.000Z').getTime(),
               doneAt: new Date('2020-06-01T22:00:00.000Z').getTime(),
             },
-          ],
+          },
         },
-        [FILTER_KEY_FEATURE]: {
+        filter: {
           filter: 'all',
         },
       };
@@ -216,7 +237,7 @@ describe('todoSlice', () => {
           },
         ]);
       Selector(displayTodosSelector)
-        .expect({ ...rootState, [FILTER_KEY_FEATURE]: { filter: 'completed' } })
+        .expect({ ...rootState, filter: { filter: 'completed' } })
         .toReturn([
           {
             id: 'bcf13961-75a5-44a4-9ed6-2c15d25424ae',
@@ -227,7 +248,7 @@ describe('todoSlice', () => {
           },
         ]);
       Selector(displayTodosSelector)
-        .expect({ ...rootState, [FILTER_KEY_FEATURE]: { filter: 'active' } })
+        .expect({ ...rootState, filter: { filter: 'active' } })
         .toReturn([
           {
             id: '66459160-2390-4532-900b-8399586ac2c5',

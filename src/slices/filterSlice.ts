@@ -35,6 +35,7 @@ export const { switchFilter } = filterSlice.actions;
 export const filterSelector: Selector<
   CombinedState<Record<typeof FILTER_KEY_FEATURE, FilterState>>,
   FilterBy
-> = (state) => state[FILTER_KEY_FEATURE].filter;
+> = (state: CombinedState<Record<typeof FILTER_KEY_FEATURE, FilterState>>) =>
+  state[FILTER_KEY_FEATURE].filter;
 
 export default filterSlice.reducer;
