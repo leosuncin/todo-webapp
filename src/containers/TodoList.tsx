@@ -1,11 +1,11 @@
 import { Grid, List, Typography } from '@material-ui/core';
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import AddTodo from '../components/AddTodo';
 import FilterTodo from '../components/FilterTodo';
 import TodoItem from '../components/TodoItem';
-import { filterSelector, switchFilter } from '../slices/filterSlice';
+import { FilterBy, filterSelector, switchFilter } from '../slices/filterSlice';
 import {
   activeCountSelector,
   addTodo,
@@ -13,18 +13,34 @@ import {
   clearCompleted,
   completedCountSelector,
   displayTodosSelector,
+  loadTodos,
   removeTodo,
+  Todo,
   toggleTodo,
   updateTodo,
 } from '../slices/todoSlice';
 
 const TodoList: React.FC = () => {
   const dispatch = useDispatch();
-  const todos = useSelector(displayTodosSelector);
-  const all = useSelector(allCountSelector);
-  const active = useSelector(activeCountSelector);
-  const completed = useSelector(completedCountSelector);
-  const filter = useSelector(filterSelector);
+  const todos: Todo[] = useSelector(displayTodosSelector);
+  const all: number = useSelector(allCountSelector);
+  const active: number = useSelector(activeCountSelector);
+  const completed: number = useSelector(completedCountSelector);
+  const filter: FilterBy = useSelector(filterSelector);
+  const fetchTodos = useCallback(() => dispatch(loadTodos()), [dispatch]);
+
+  useEffect(() => {
+    const asyncThunkAction = fetchTodos();
+    window.addEventListener('visibilitychange', fetchTodos);
+    window.addEventListener('online', fetchTodos);
+
+    return () => {
+      window.removeEventListener('visibilitychange', fetchTodos);
+      window.removeEventListener('online', fetchTodos);
+      // @ts-ignore
+      asyncThunkAction.abort();
+    };
+  }, [fetchTodos]);
 
   return (
     <Grid item sm={10} md={8} style={{ margin: '0 auto' }}>

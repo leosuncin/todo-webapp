@@ -1,5 +1,6 @@
 import {
   CombinedState,
+  createAsyncThunk,
   createEntityAdapter,
   createSelector,
   createSlice,
@@ -8,6 +9,7 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 
+import { getAllTodos, HttpError } from '../api/client';
 import { FilterBy, filterSelector } from './filterSlice';
 
 export type Todo = {
@@ -18,7 +20,10 @@ export type Todo = {
   doneAt?: number;
 };
 
-export type TodoState = EntityState<Todo>;
+export type TodoState = EntityState<Todo> & {
+  loading: boolean;
+  error?: string;
+};
 
 export const TODO_KEY_FEATURE = 'todo';
 
@@ -28,7 +33,31 @@ const todoAdapter = createEntityAdapter<Todo>({
     new Date(a.createdAt) < new Date(b.createdAt) ? 1 : -1,
 });
 
-const initialState: TodoState = todoAdapter.getInitialState();
+const initialState: TodoState = todoAdapter.getInitialState({ loading: false });
+
+export const loadTodos = createAsyncThunk<
+  Todo[],
+  never,
+  {
+    rejectValue: HttpError;
+    state: CombinedState<Record<typeof TODO_KEY_FEATURE, TodoState>>;
+  }
+>(
+  `${TODO_KEY_FEATURE}/loadTodos`,
+  async (_, { rejectWithValue, signal }) => {
+    try {
+      const todos = await getAllTodos({ signal });
+
+      return todos;
+    } catch (error) {
+      if (HttpError.isHttpError(error)) return rejectWithValue(error);
+      throw error;
+    }
+  },
+  {
+    condition: (_, { getState }) => !getState().todo.loading,
+  },
+);
 
 const todoSlice = createSlice({
   name: TODO_KEY_FEATURE,
@@ -79,6 +108,31 @@ const todoSlice = createSlice({
           .filter((t) => !t.done),
       );
     },
+  },
+  extraReducers(builder) {
+    builder.addCase(loadTodos.pending.toString(), (state: TodoState) => {
+      state.loading = true;
+      state.error = undefined;
+    });
+
+    builder.addCase(
+      loadTodos.fulfilled.toString(),
+      (state: TodoState, action: PayloadAction<Todo[]>) => {
+        todoAdapter.setAll(state, action);
+        state.loading = false;
+      },
+    );
+
+    builder.addCase(
+      loadTodos.rejected.toString(),
+      (
+        state: TodoState,
+        action: PayloadAction<string, string, never, HttpError>,
+      ) => {
+        state.loading = false;
+        state.error = action.error.message;
+      },
+    );
   },
 });
 
