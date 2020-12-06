@@ -1,6 +1,6 @@
 import { Button, Grid, TextField } from '@material-ui/core';
 import React from 'react';
-import { useForm, ValidationRules } from 'react-hook-form';
+import { useForm, RegisterOptions } from 'react-hook-form';
 
 type NewTodoFields = {
   /**
@@ -25,7 +25,7 @@ export type AddTodoProps = {
   defaultText?: string;
 };
 
-export const validations: { [name in keyof NewTodoFields]: ValidationRules } = {
+export const validations: { [name in keyof NewTodoFields]: RegisterOptions } = {
   text: {
     required: 'Text is required',
     maxLength: {
@@ -36,9 +36,13 @@ export const validations: { [name in keyof NewTodoFields]: ValidationRules } = {
 };
 
 const AddTodo: React.FC<AddTodoProps> = ({ onSubmit, defaultText = '' }) => {
-  const { handleSubmit, register, errors, formState, reset } = useForm<
-    NewTodoFields
-  >({
+  const {
+    handleSubmit,
+    register,
+    errors,
+    formState,
+    reset,
+  } = useForm<NewTodoFields>({
     defaultValues: {
       text: defaultText,
     },

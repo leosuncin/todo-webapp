@@ -73,9 +73,8 @@ export const createTodoHandler = rest.post<CreateTodo>(
   },
 );
 
-export const listTodosHandler = rest.get<undefined, Todo[]>(
-  '/api/todos',
-  (_, res, ctx) => res(ctx.delay(Math.random() * 1e3), ctx.json(todos)),
+export const listTodosHandler = rest.get('/api/todos', (_, res, ctx) =>
+  res(ctx.delay(Math.random() * 1e3), ctx.json(todos)),
 );
 
 export const updateTodoHandler = rest.put<EditTodo, any, Pick<Todo, 'id'>>(
