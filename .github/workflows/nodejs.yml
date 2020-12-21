@@ -26,6 +26,19 @@ jobs:
         NODE_OPTIONS: '--max-old-space-size=8192'
         CYPRESS_INSTALL_BINARY: 0
 
+  type_check:
+    name: Check static types
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout 🛎
+      uses: actions/checkout@v2
+    - name: Install NPM dependencies 📦
+      uses: bahmutov/npm-install@v1
+      env:
+        CYPRESS_INSTALL_BINARY: 0
+    - name: Check types 🧩
+      uses: icrawl/action-tsc@v1
+
   test-unit:
     name: Run unit, smoke and integration tests
     runs-on: ubuntu-latest
