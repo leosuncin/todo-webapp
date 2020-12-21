@@ -77,18 +77,22 @@ jobs:
     name: Run end-to-end tests
     runs-on: ubuntu-16.04
     if: "!contains(github.event.head_commit.message, 'skip ci')"
+    needs: [lint, type_check]
     steps:
-      - uses: actions/checkout@v2
-      - uses: cypress-io/github-action@v2
+      - name: Checkout 🛎
+        uses: actions/checkout@v2
+      - name: Run Cypress tests 🌲
+        uses: cypress-io/github-action@v2
         timeout-minutes: 10
         with:
           build: yarn build
           start: npx superstatic build -p 3000
           wait-on: 'http://localhost:3000'
-      - uses: actions/upload-artifact@v2
+      - name: Upload screenshots on failure 🎞️
+        uses: actions/upload-artifact@v2
         if: failure()
         with:
-          name: screenshots & videos
+          name: Cypress screenshots & videos
           path: |
             cypress/screenshots
             cypress/videos
