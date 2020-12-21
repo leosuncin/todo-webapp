@@ -101,14 +101,20 @@ jobs:
     name: Run visual regression tests
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'skip ci')"
+    needs: [lint, type_check]
     steps:
-      - uses: actions/checkout@v2
-      - uses: bahmutov/npm-install@v1
-      - name: Run loki
-        run: |
-          yarn build-storybook
-          yarn loki test --requireReference --reactUri file:./storybook-static
-      - uses: actions/upload-artifact@v2
+      - name: Checkout 🛎
+        uses: actions/checkout@v2
+      - name: Install NPM dependencies 📦
+        uses: bahmutov/npm-install@v1
+        env:
+          CYPRESS_INSTALL_BINARY: 0
+      - name: Build the storybook 🏗
+        run: yarn build-storybook
+      - name: Run loki 🔍
+        run: yarn loki test --requireReference --reactUri file:./storybook-static
+      - name: Upload screenshots with differences 📸
+        uses: actions/upload-artifact@v2
         if: failure()
         with:
           name: current and difference
