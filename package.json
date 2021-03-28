@@ -47,7 +47,7 @@
     "build": "react-scripts build",
     "eject": "react-scripts eject",
     "format": "prettier --write",
-    "postinstall": "msw init public",
+    "postinstall": "msw init public; is-ci || husky install",
     "start": "react-scripts start",
     "test": "react-scripts test",
     "test:e2e": "BROWSER=none start-test 3000 'cypress run'",
@@ -78,12 +78,6 @@
     "extends": [
       "@suncin/stylelint-config-scss"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "yarn test --watchAll=false"
-    }
   },
   "lint-staged": {
     "*.{ts,tsx,js}": [
