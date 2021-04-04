@@ -36,17 +36,12 @@ export const validations: { [name in keyof NewTodoFields]: RegisterOptions } = {
 };
 
 const AddTodo: React.FC<AddTodoProps> = ({ onSubmit, defaultText = '' }) => {
-  const {
-    handleSubmit,
-    register,
-    errors,
-    formState,
-    reset,
-  } = useForm<NewTodoFields>({
+  const { handleSubmit, register, formState, reset } = useForm<NewTodoFields>({
     defaultValues: {
       text: defaultText,
     },
   });
+  const { ref, ...rest } = register('text', validations.text);
 
   return (
     <Grid
@@ -59,14 +54,14 @@ const AddTodo: React.FC<AddTodoProps> = ({ onSubmit, defaultText = '' }) => {
       <TextField
         label="Task"
         margin="normal"
-        name="text"
         id="text-input"
         variant="outlined"
         placeholder="What needs to be done? "
         fullWidth
-        error={!!errors.text}
-        helperText={errors.text?.message}
-        inputRef={register(validations.text)}
+        error={!!formState.errors.text}
+        helperText={formState.errors.text?.message}
+        inputRef={ref}
+        {...rest}
       />
       <Button
         color="primary"
