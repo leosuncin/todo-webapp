@@ -40,6 +40,7 @@
     "loki": "^0.28.1",
     "mutationobserver-shim": "^0.3.7",
     "prettier": "^2.2.1",
+    "reg-cli": "^0.17.0",
     "start-server-and-test": "^1.11.5",
     "stylelint": "^13.8.0"
   },

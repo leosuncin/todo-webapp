@@ -113,6 +113,11 @@ jobs:
         run: yarn build-storybook
       - name: Run loki 🔍
         run: yarn loki test --requireReference --reactUri file:./storybook-static --chromeTolerance 10
+      - name: Generate visual regression reporter 📝
+        if: always()
+        run: |
+          node bin/generate-visual-json-report.js
+          yarn reg-cli --from .loki/report.json --report .loki/report.html
       - name: Upload screenshots with differences 📸
         uses: actions/upload-artifact@v2
         if: failure()
@@ -121,3 +126,5 @@ jobs:
           path: |
             .loki/current
             .loki/difference
+            .loki/report.json
+            .loki/report.html
