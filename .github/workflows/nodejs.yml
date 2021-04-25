@@ -112,7 +112,7 @@ jobs:
       - name: Build the storybook 🏗
         run: yarn build-storybook
       - name: Run loki 🔍
-        run: yarn loki test --requireReference --reactUri file:./storybook-static
+        run: yarn loki test --requireReference --reactUri file:./storybook-static --chromeTolerance 10
       - name: Upload screenshots with differences 📸
         uses: actions/upload-artifact@v2
         if: failure()
