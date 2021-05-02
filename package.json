@@ -44,6 +44,9 @@
     "start-server-and-test": "^1.11.5",
     "stylelint": "^13.8.0"
   },
+  "resolutions": {
+    "babel-loader": "8.1.0"
+  },
   "scripts": {
     "build": "react-scripts build",
     "eject": "react-scripts eject",
