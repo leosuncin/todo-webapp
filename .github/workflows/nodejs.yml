@@ -3,51 +3,12 @@ name: Test CI
 on: [push, pull_request]
 
 jobs:
-  lint:
-    name: Lint source code
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout 🛎
-      uses: actions/checkout@v2
-    - name: Choose reporter for ReviewDog 🚦
-      uses: haya14busa/action-cond@v1
-      id: reporter
-      with:
-        cond: github.event_name == 'pull_request'
-        if_true: github-pr-review
-        if_false: github-check
-    - name: Run ESlint 🧹
-      uses: reviewdog/action-eslint@v1
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        eslint_flags: --ext '.js' --ext '.ts' --ext '.tsx' .
-        reporter: ${{ steps.reporter.outputs.value }}
-      env:
-        NODE_OPTIONS: '--max-old-space-size=8192'
-        CYPRESS_INSTALL_BINARY: 0
-
-  type_check:
-    name: Check static types
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout 🛎
-      uses: actions/checkout@v2
-    - name: Install NPM dependencies 📦
-      uses: bahmutov/npm-install@v1
-      env:
-        CYPRESS_INSTALL_BINARY: 0
-    - name: Check types 🧩
-      uses: icrawl/action-tsc@v1
-
   test-unit:
     name: Run unit, smoke and integration tests
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'skip ci')"
-    needs: [lint, type_check]
     env:
       CYPRESS_INSTALL_BINARY: 0
-      CI: true
-      SKIP_PREFLIGHT_CHECK: true
     steps:
       - name: Checkout 🛎
         uses: actions/checkout@v2
@@ -58,8 +19,8 @@ jobs:
       - name: Run smoke tests 💨
         run: yarn storybook --smoke-test
       - name: Set code coverage commit status 📫
-        if: github.event_name == 'pull_request'
-        uses: slavcodev/coverage-monitor-action@1.1.0
+        if: github.event_name == 'pull_request' && !contains(github.event.pull_request.user.login, 'dependabot')
+        uses: slavcodev/coverage-monitor-action@1.2.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           clover_file: coverage/clover.xml
@@ -77,7 +38,6 @@ jobs:
     name: Run end-to-end tests
     runs-on: ubuntu-16.04
     if: "!contains(github.event.head_commit.message, 'skip ci')"
-    needs: [lint, type_check]
     steps:
       - name: Checkout 🛎
         uses: actions/checkout@v2
@@ -101,7 +61,6 @@ jobs:
     name: Run visual regression tests
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'skip ci')"
-    needs: [lint, type_check]
     steps:
       - name: Checkout 🛎
         uses: actions/checkout@v2
