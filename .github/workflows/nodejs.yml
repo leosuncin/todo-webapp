@@ -13,7 +13,7 @@ jobs:
       - name: Install dependencies 📦
         uses: bahmutov/npm-install@v1
       - name: Check types 🧩
-        uses: npx tsc --noEmit --noErrorTruncation --pretty false --incremental false
+        run: npx tsc --noEmit --noErrorTruncation --pretty false --incremental false
       - name: Run ESlint 🧹
         run: npx eslint --ext .js,.ts,.tsx .
 
