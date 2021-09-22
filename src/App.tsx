@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './App.scss';
+import './App.css';
 import Layout from './components/Layout';
 import TodoList from './containers/TodoList';
 
