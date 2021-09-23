@@ -56,18 +56,18 @@ jobs:
     steps:
       - name: Checkout 🛎
         uses: actions/checkout@v2
-      - name: Run component tests 🧪
-        uses: cypress-io/github-action@v2
-        with:
-          command: yarn cypress run-ct
       - name: Run Cypress tests 🌲
         uses: cypress-io/github-action@v2
         timeout-minutes: 10
         with:
-          install: false
           build: yarn build
           start: npx superstatic build -p 3000
           wait-on: 'http://localhost:3000'
+      - name: Run component tests 🧪
+        uses: cypress-io/github-action@v2
+        with:
+          install: false
+          command: yarn cypress run-ct
       - name: Upload screenshots on failure 🎞️
         uses: actions/upload-artifact@v2
         if: failure()
