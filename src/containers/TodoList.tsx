@@ -1,4 +1,4 @@
-import { Grid, List, Typography } from '@material-ui/core';
+import { Grid, List, Typography } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { getAllTodos } from '../api/client';

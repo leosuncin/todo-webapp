@@ -6,8 +6,8 @@ import {
   ListItemSecondaryAction,
   ListItemText,
   TextField,
-} from '@material-ui/core';
-import { Delete as DeleteIcon } from '@material-ui/icons';
+} from '@mui/material';
+import { Delete as DeleteIcon } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
 
 import { formatRelativeTime } from '../formatRelativeTime';

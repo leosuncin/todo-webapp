@@ -1,5 +1,5 @@
-import { Button, ButtonGroup, Paper, Typography } from '@material-ui/core';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { Button, ButtonGroup, Paper, Typography } from '@mui/material';
+import { createTheme } from '@mui/material/styles';
 import React from 'react';
 
 export type FilterBy = 'all' | 'completed' | 'active';
@@ -13,7 +13,7 @@ export type FilterTodoProps = {
   onClearCompleted: () => void;
 };
 
-const useStyles = makeStyles((theme: Theme) =>
+/* const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
@@ -26,7 +26,8 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: 'auto 0',
     },
   }),
-);
+); */
+const theme = createTheme();
 
 const FilterTodo: React.FC<FilterTodoProps> = ({
   all,
@@ -36,11 +37,21 @@ const FilterTodo: React.FC<FilterTodoProps> = ({
   switchFilter,
   onClearCompleted,
 }) => {
-  const classes = useStyles();
-
   return (
-    <Paper className={classes.root}>
-      <Typography className={classes.typography}>
+    <Paper
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignContent: 'center',
+        padding: theme.spacing(),
+        margin: theme.spacing(2, 0),
+      }}
+    >
+      <Typography
+        sx={{
+          margin: 'auto 0',
+        }}
+      >
         {active} items left
       </Typography>
       <ButtonGroup>
@@ -48,7 +59,7 @@ const FilterTodo: React.FC<FilterTodoProps> = ({
           variant="outlined"
           size="small"
           disableElevation
-          color={filter === 'all' ? 'primary' : 'default'}
+          color={filter === 'all' ? 'primary' : 'inherit'}
           onClick={() => switchFilter('all')}
         >
           All ({all})
@@ -58,7 +69,7 @@ const FilterTodo: React.FC<FilterTodoProps> = ({
           size="small"
           disableElevation
           disabled={active < 1}
-          color={filter === 'active' ? 'primary' : 'default'}
+          color={filter === 'active' ? 'primary' : 'inherit'}
           onClick={() => switchFilter('active')}
         >
           Active ({active})
@@ -68,7 +79,7 @@ const FilterTodo: React.FC<FilterTodoProps> = ({
           size="small"
           disableElevation
           disabled={completed < 1}
-          color={filter === 'completed' ? 'primary' : 'default'}
+          color={filter === 'completed' ? 'primary' : 'inherit'}
           onClick={() => switchFilter('completed')}
         >
           Completed ({completed})
@@ -77,7 +88,7 @@ const FilterTodo: React.FC<FilterTodoProps> = ({
       {completed ? (
         <Button
           variant="outlined"
-          color="secondary"
+          color="warning"
           size="small"
           disableElevation
           onClick={onClearCompleted}

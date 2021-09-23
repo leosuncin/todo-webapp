@@ -1,10 +1,4 @@
-import {
-  AppBar,
-  Container,
-  Paper,
-  Toolbar,
-  Typography,
-} from '@material-ui/core';
+import { AppBar, Container, Paper, Toolbar, Typography } from '@mui/material';
 import React from 'react';
 
 export type LayoutProps = { title?: string };
