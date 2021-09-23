@@ -24,7 +24,7 @@ export interface ErrorResponse {
   readonly errors?: Record<string, string>;
 }
 
-const todoBuilder = build<Todo>({
+export const todoBuilder = build<Todo>({
   fields: {
     id: fake((f) => f.random.uuid()),
     text: fake((f) => f.hacker.phrase()),
@@ -50,7 +50,7 @@ const todoBuilder = build<Todo>({
   },
 });
 
-const todos: Todo[] = Array.from({ length: 10 }, () =>
+export const todos: Todo[] = Array.from({ length: 10 }, () =>
   todoBuilder({ traits: 'oldTask' }),
 );
 
