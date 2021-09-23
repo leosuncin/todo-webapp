@@ -12,8 +12,9 @@ export class HttpError extends Error implements ErrorResponse {
     Object.setPrototypeOf(this, new.target.prototype);
   }
 
-  static isHttpError(error: Error): error is HttpError {
+  static isHttpError(error: unknown): error is HttpError {
     return (
+      error instanceof Error &&
       error.name === this.name &&
       Object.prototype.hasOwnProperty.call(error, 'statusCode')
     );
