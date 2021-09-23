@@ -17,7 +17,7 @@ export default function plugins(
 ) {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
-
+  require('@cypress/react/plugins/react-scripts')(on, config);
   // IMPORTANT to return the config object
   // with the any changed environment variables
   return config;
