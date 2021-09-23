@@ -1,6 +1,7 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-export CI=true
+PATH=$(npm bin):$PATH
 
-yarn test
+tsc --noEmit --noErrorTruncation --pretty false --incremental false
+yarn test --watchAll=false
