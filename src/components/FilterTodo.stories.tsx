@@ -1,15 +1,15 @@
-// also exported from '@storybook/react' if you can deal with breaking changes in 6.1
-import { Meta, Story } from '@storybook/react/types-6-0';
-import React from 'react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import FilterTodo, { FilterTodoProps } from './FilterTodo';
+import FilterTodo from './FilterTodo';
 
 export default {
   title: 'Todo/Filter Todo',
   component: FilterTodo,
-} as Meta;
+} as ComponentMeta<typeof FilterTodo>;
 
-const Template: Story<FilterTodoProps> = (args) => <FilterTodo {...args} />;
+const Template: ComponentStory<typeof FilterTodo> = (args) => (
+  <FilterTodo {...args} />
+);
 
 export const Empty = Template.bind({});
 Empty.args = { all: 0, active: 0, completed: 0 };

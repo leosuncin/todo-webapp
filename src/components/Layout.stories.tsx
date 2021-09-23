@@ -1,15 +1,13 @@
-// also exported from '@storybook/react' if you can deal with breaking changes in 6.1
-import { Meta, Story } from '@storybook/react/types-6-0';
-import React from 'react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import Layout, { LayoutProps } from './Layout';
+import Layout from './Layout';
 
 export default {
   title: 'Todo/Layout',
   component: Layout,
-} as Meta;
+} as ComponentMeta<typeof Layout>;
 
-export const Empty: Story<LayoutProps> = (args) => (
+export const Empty: ComponentStory<typeof Layout> = (args) => (
   <Layout {...args}>
     <div></div>
   </Layout>
