@@ -1,9 +1,13 @@
-import { act, render, screen } from '@testing-library/react';
+import {
+  render,
+  screen,
+  waitForElementToBeRemoved,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { setupServer } from 'msw/node';
-import React from 'react';
 
 import { listTodosHandler } from '../mocks/handlers';
+import { TodoProvider } from '../hooks/useTodo';
 import TodoList from './TodoList';
 
 describe('<TodoList />', () => {
@@ -21,20 +25,22 @@ describe('<TodoList />', () => {
     server.close();
   });
 
-  it('should render', () => {
-    expect(render(<TodoList />)).toBeDefined();
+  it('should render', async () => {
+    expect(render(<TodoList />, { wrapper: TodoProvider })).toBeDefined();
     expect(screen.getByRole('listitem')).toHaveTextContent(
       'The list of todo will appear here.',
+    );
+
+    await waitForElementToBeRemoved(
+      screen.getByText('The list of todo will appear here.'),
     );
   });
 
   it('create a todo', async () => {
-    render(<TodoList />);
+    render(<TodoList />, { wrapper: TodoProvider });
 
     await userEvent.type(screen.getByLabelText(/Task/i), 'Make a sandwich');
-    act(() => {
-      userEvent.click(screen.getByRole('button', { name: /Add/i }));
-    });
+    userEvent.click(screen.getByRole('button', { name: /Add/i }));
 
     await expect(
       screen.findByText('Make a sandwich'),
@@ -42,14 +48,11 @@ describe('<TodoList />', () => {
   });
 
   it('remove todo', async () => {
-    render(<TodoList />);
+    render(<TodoList />, { wrapper: TodoProvider });
 
-    await act(async () => {
-      await userEvent.type(
-        screen.getByLabelText(/Task/i),
-        'Make a sandwich{enter}',
-      );
-    });
+    userEvent.type(screen.getByLabelText(/Task/i), 'Make a sandwich{enter}');
+
+    await screen.findByText('Make a sandwich');
 
     userEvent.click(screen.getByRole('button', { name: /^Delete todo/ }));
 
@@ -57,14 +60,12 @@ describe('<TodoList />', () => {
   });
 
   it('toggle todo', async () => {
-    render(<TodoList />);
+    render(<TodoList />, { wrapper: TodoProvider });
 
-    await act(async () => {
-      await userEvent.type(
-        screen.getByLabelText(/Task/i),
-        'Make a sandwich{enter}',
-      );
-    });
+    userEvent.type(screen.getByLabelText(/Task/i), 'Make a sandwich{enter}');
+
+    await screen.findByText('Make a sandwich');
+
     userEvent.click(screen.getByRole('checkbox', { name: /Mark .* as done/ }));
 
     expect(screen.getAllByRole('listitem')).toHaveLength(1);

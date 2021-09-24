@@ -1,6 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 
 import TodoItem from './TodoItem';
 import * as TodoItemStories from './TodoItem.stories';
@@ -55,9 +54,7 @@ describe('<TodoItem />', () => {
     );
     fireEvent.blur(screen.getByRole('textbox'));
 
-    expect(spyChange).toHaveBeenCalledWith(todo.id, {
-      text: 'Take over the world',
-    });
+    expect(spyChange).toHaveBeenCalledWith(todo.id, 'Take over the world');
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   });
 
@@ -77,7 +74,7 @@ describe('<TodoItem />', () => {
     userEvent.clear(screen.getByRole('textbox'));
     userEvent.type(screen.getByRole('textbox'), 'Make exercise{enter}');
 
-    expect(spyChange).toHaveBeenCalledWith(todo.id, { text: 'Make exercise' });
+    expect(spyChange).toHaveBeenCalledWith(todo.id, 'Make exercise');
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   });
 
@@ -177,9 +174,10 @@ describe('<TodoItem />', () => {
     userEvent.dblClick(screen.getByText(todo.text));
     userEvent.type(screen.getByRole('textbox'), ' Do it. Makes us.{enter}');
 
-    expect(spyChange).toHaveBeenCalledWith(todo.id, {
-      text: 'Work it. Make it. Do it. Makes us.',
-    });
+    expect(spyChange).toHaveBeenCalledWith(
+      todo.id,
+      'Work it. Make it. Do it. Makes us.',
+    );
   });
 
   it('should remove one todo', () => {

@@ -1,3 +1,4 @@
+import { Delete as DeleteIcon } from '@mui/icons-material';
 import {
   Checkbox,
   IconButton,
@@ -7,16 +8,15 @@ import {
   ListItemText,
   TextField,
 } from '@mui/material';
-import { Delete as DeleteIcon } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
 
 import { formatRelativeTime } from '../formatRelativeTime';
-import { validations } from './AddTodo';
 import { Todo } from '../hooks/todoReducer';
+import { validations } from './AddTodo';
 
 export type TodoItemProps = {
   todo: Todo;
-  onChangeTodo: (id: Todo['id'], updates: Pick<Todo, 'text'>) => void;
+  onChangeTodo: (id: Todo['id'], text: string) => void;
   onToggleDone: (id: Todo['id'], done: boolean) => void;
   onRemoveTodo: (id: Todo['id']) => void;
 };
@@ -48,7 +48,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
   const saveTodo = () => {
     const hasError = !!validationError;
 
-    if (todo.text !== text && !hasError) onChangeTodo(todo.id, { text });
+    if (todo.text !== text && !hasError) onChangeTodo(todo.id, text);
 
     if (!hasError) setIsEditing(false);
   };

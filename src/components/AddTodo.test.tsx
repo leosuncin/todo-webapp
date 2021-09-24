@@ -1,6 +1,5 @@
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 
 import AddTodo from './AddTodo';
 
@@ -18,9 +17,7 @@ describe('<AddTodo />', () => {
     render(<AddTodo onSubmit={spySubmit} />);
 
     userEvent.type(screen.getByLabelText(textLabel), 'Make a sandwich');
-    act(() => {
-      userEvent.click(screen.getByRole('button', { name: submitButton }));
-    });
+    userEvent.click(screen.getByRole('button', { name: submitButton }));
 
     await waitFor(() => {
       expect(spySubmit).toHaveBeenCalledWith({ text: 'Make a sandwich' });
@@ -31,17 +28,13 @@ describe('<AddTodo />', () => {
     const spySubmit = jest.fn();
     render(<AddTodo onSubmit={spySubmit} />);
 
-    act(() => {
-      userEvent.click(screen.getByRole('button', { name: submitButton }));
-    });
+    userEvent.click(screen.getByRole('button', { name: submitButton }));
     await screen.findByText(/Text is required/i);
 
-    await act(async () => {
-      await userEvent.type(
-        screen.getByLabelText(textLabel),
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis asperiores quisquam quos assumenda esse voluptatum laborum accusantium, eveniet voluptate!',
-      );
-    });
+    userEvent.type(
+      screen.getByLabelText(textLabel),
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis asperiores quisquam quos assumenda esse voluptatum laborum accusantium, eveniet voluptate!',
+    );
     await screen.findByText(/Text must be at most 140 characters/i);
 
     expect(spySubmit).not.toHaveBeenCalled();
