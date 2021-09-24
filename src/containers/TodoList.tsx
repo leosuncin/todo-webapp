@@ -1,21 +1,28 @@
 import { Grid, List, Typography } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useReducer, useState } from 'react';
 
 import { getAllTodos } from '../api/client';
 import AddTodo from '../components/AddTodo';
 import FilterTodo, { FilterBy } from '../components/FilterTodo';
 import TodoItem from '../components/TodoItem';
-import { Todo, todoReducer } from '../hooks/todoReducer';
+import todoReducer, {
+  addTodo,
+  removeTodo,
+  setTodoList,
+  Todo,
+  toggleTodo,
+  updateTodo,
+} from '../hooks/todoReducer';
 
 const TodoList: React.FC = () => {
-  const [state, dispatch] = React.useReducer(todoReducer, { todos: [] });
+  const [state, dispatch] = useReducer(todoReducer, { todos: [] });
   const [filter, setFilter] = useState<FilterBy>('all');
   const active = state.todos.filter((todo) => !todo.done);
   const completed = state.todos.filter((todo) => todo.done);
   const fetchAllTodos = useCallback(async (signal?: AbortSignal) => {
     try {
       const todos = await getAllTodos({ signal });
-      dispatch({ type: 'SET_TODOS', payload: todos });
+      dispatch(setTodoList(todos));
     } catch {}
   }, []);
 
@@ -29,35 +36,17 @@ const TodoList: React.FC = () => {
 
   function handleCreateTodo(text: string) {
     if (text) {
-      dispatch({
-        type: 'ADD_TODO',
-        payload: text,
-      });
+      dispatch(addTodo(text));
     }
   }
   function handleEditTodo(id: Todo['id'], { text }: Pick<Todo, 'text'>) {
-    dispatch({
-      type: 'UPDATE_TODO',
-      payload: {
-        id,
-        text,
-      },
-    });
+    dispatch(updateTodo(id, text));
   }
   function handleToggleDone(id: Todo['id'], done: boolean) {
-    dispatch({
-      type: 'TOGGLE_TODO',
-      payload: {
-        id,
-        done,
-      },
-    });
+    dispatch(toggleTodo(id, done));
   }
   function handleDeleteTodo(id: Todo['id']) {
-    dispatch({
-      type: 'REMOVE_TODO',
-      payload: id,
-    });
+    dispatch(removeTodo(id));
   }
   function getTodos(): Todo[] {
     switch (filter) {
