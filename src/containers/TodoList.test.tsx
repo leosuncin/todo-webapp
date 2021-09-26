@@ -7,7 +7,6 @@ import userEvent from '@testing-library/user-event';
 import { setupServer } from 'msw/node';
 
 import { listTodosHandler } from '../mocks/handlers';
-import { TodoProvider } from '../hooks/useTodo';
 import TodoList from './TodoList';
 
 describe('<TodoList />', () => {
@@ -26,7 +25,7 @@ describe('<TodoList />', () => {
   });
 
   it('should render', async () => {
-    expect(render(<TodoList />, { wrapper: TodoProvider })).toBeDefined();
+    expect(render(<TodoList />)).toBeDefined();
     expect(screen.getByRole('listitem')).toHaveTextContent(
       'The list of todo will appear here.',
     );
@@ -37,7 +36,7 @@ describe('<TodoList />', () => {
   });
 
   it('create a todo', async () => {
-    render(<TodoList />, { wrapper: TodoProvider });
+    render(<TodoList />);
 
     await userEvent.type(screen.getByLabelText(/Task/i), 'Make a sandwich');
     userEvent.click(screen.getByRole('button', { name: /Add/i }));
@@ -48,7 +47,7 @@ describe('<TodoList />', () => {
   });
 
   it('remove todo', async () => {
-    render(<TodoList />, { wrapper: TodoProvider });
+    render(<TodoList />);
 
     userEvent.type(screen.getByLabelText(/Task/i), 'Make a sandwich{enter}');
 
@@ -60,7 +59,7 @@ describe('<TodoList />', () => {
   });
 
   it('toggle todo', async () => {
-    render(<TodoList />, { wrapper: TodoProvider });
+    render(<TodoList />);
 
     userEvent.type(screen.getByLabelText(/Task/i), 'Make a sandwich{enter}');
 

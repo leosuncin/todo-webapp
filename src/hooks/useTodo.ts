@@ -1,13 +1,4 @@
-import {
-  createContext,
-  PropsWithChildren,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useReducer,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 
 import { getAllTodos } from '../api/client';
 import type { FilterBy } from '../components/FilterTodo';
@@ -33,9 +24,7 @@ type TodoContextValue = {
   setFilter(filter: FilterBy): void;
 };
 
-const TodoContext = createContext<TodoContextValue | undefined>(undefined);
-
-export function TodoProvider({ children }: PropsWithChildren<{}>) {
+export function useTodo(): TodoContextValue {
   const [state, dispatch] = useReducer(todoReducer, { todos: [] });
   const [filter, setFilter] = useState<FilterBy>('all');
   const active = useMemo(
@@ -58,7 +47,23 @@ export function TodoProvider({ children }: PropsWithChildren<{}>) {
         return state.todos;
     }
   }, [active, completed, filter, state.todos]);
-  const contextValue: TodoContextValue = {
+
+  useEffect(() => {
+    const ctrl = new AbortController();
+
+    async function fetchTodos() {
+      try {
+        const todos = await getAllTodos({ signal: ctrl.signal });
+        dispatch(setTodoList(todos));
+      } catch {}
+    }
+
+    fetchTodos();
+
+    return () => ctrl.abort();
+  }, [dispatch]);
+
+  return {
     todos: state.todos,
     active,
     completed,
@@ -84,31 +89,4 @@ export function TodoProvider({ children }: PropsWithChildren<{}>) {
     ),
     setFilter,
   };
-
-  useEffect(() => {
-    const ctrl = new AbortController();
-
-    async function fetchTodos() {
-      try {
-        const todos = await getAllTodos({ signal: ctrl.signal });
-        dispatch(setTodoList(todos));
-      } catch {}
-    }
-
-    fetchTodos();
-
-    return () => ctrl.abort();
-  }, [dispatch]);
-
-  return (
-    <TodoContext.Provider value={contextValue}>{children}</TodoContext.Provider>
-  );
-}
-
-export function useTodo(): TodoContextValue {
-  const context = useContext(TodoContext);
-
-  if (!context) throw new Error('useTodo must be used within a TodoProvider');
-
-  return context;
 }
